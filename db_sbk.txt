@@ -1,0 +1,105 @@
+create table if not exists jurusan (
+id_jurusan int not null AUTO_INCREMENT,
+nama_jurusan varchar (50),
+PRIMARY KEY (id_jurusan)
+);
+
+
+create table if not exists kelas (
+id_kelas int not null AUTO_INCREMENT,
+id_jurusan int not null,
+nama_kelas varchar (50),
+PRIMARY KEY(id_kelas),
+FOREIGN KEY (id_jurusan) REFERENCES jurusan (id_jurusan)
+ON DELETE CASCADE ON UPDATE CASCADE);
+
+
+create table if not exists siswa (
+nis int not null,
+nisn int,
+id_kelas int not null,
+nama_lengkap varchar (50),
+jk varchar (9),
+ttl varchar (50),
+email varchar (50),
+agama varchar (10),
+alamat text,
+no_hp varchar (15),
+nama_ayah varchar (50),
+nama_ibu varchar (50),
+pekerjaan_ayah varchar (50),
+pekerjaan_ibu varchar (50),
+alamat_ortu text,
+PRIMARY KEY (nis),
+FOREIGN KEY (id_kelas) REFERENCES kelas (id_kelas)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+create table if not exists users (
+id_users int not null AUTO_INCREMENT,
+nis int,
+nisn int,
+password varchar (50),
+level varchar (10),
+PRIMARY KEY (id_users),
+FOREIGN KEY (nis) REFERENCES siswa (nis)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+create table if not exists kategori_pelanggaran (
+id_kategori int not null AUTO_INCREMENT,
+nama_kategori varchar (100),
+PRIMARY KEY (id_kategori)
+);
+
+create table if not exists pelanggaran (
+id_pelanggaran int not null AUTO_INCREMENT,
+id_kategori int, 
+nama_pelanggaran varchar (255),
+bobot int,
+PRIMARY KEY (id_pelanggaran),
+FOREIGN KEY (id_kategori) REFERENCES kategori_pelanggaran (id_kategori)
+ON DELETE CASCADE ON UPDATE CASCADE 
+);
+
+create table if not exists bimbingan (
+id_bimbingan int not null AUTO_INCREMENT,
+nis int,
+subject varchar (100),
+isi_bimbingan text,
+tanggal_bimbingan datetime,
+status tinyint(1),
+PRIMARY KEY (id_bimbingan),
+FOREIGN KEY (nis) REFERENCES siswa (nis)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+create table if not exists balasan_bimbingan(
+id_balasan int not null AUTO_INCREMENT,
+id_bimbingan int,
+id_users int,
+isi_balasan text,
+tanggal_balasan datetime,
+PRIMARY KEY (id_balasan),
+FOREIGN KEY (id_bimbingan) REFERENCES bimbingan (id_bimbingan)
+ON DELETE CASCADE ON UPDATE CASCADE, 
+FOREIGN KEY (id_users) REFERENCES users (id_users)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+create table if not exists konseling (
+id_konseling int not null AUTO_INCREMENT,
+nis int, 
+id_pelanggaran int,
+waktu_pelanggaran date,
+waktu_input datetime,
+tkp varchar (100),
+status tinyint (1),
+PRIMARY KEY (id_konseling),
+FOREIGN KEY (nis) REFERENCES siswa (nis)
+ON DELETE CASCADE ON UPDATE CASCADE, 
+FOREIGN KEY (id_pelanggaran) REFERENCES pelanggaran (id_pelanggaran)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
