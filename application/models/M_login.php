@@ -3,13 +3,86 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class M_login extends CI_Model {
 
 	public function verifikasi($username, $password) {
-		$this->db->or_where('username',$username);
-		$this->db->where('password',$password);
-		$query = $this->db->get('users');
-		if ($query->num_rows() > 0) {
-			return true;
-		} else {
-			return false;
+		$user =  $this->db->get_where('admin', ['username' => $username])->row();
+		if($user){
+			if(password_verify($password, $user->password)) {
+				$data = array(
+					'status' => true,
+					'level' => 'admin',
+					'id_sekolah' => $user->id_sekolah,
+					'message' => 'berhasil'
+				);
+				return $data;
+			}else{
+				$data = array(
+					'status' => false,
+					'level' => 'admin',
+					'message' => 'Password Salah'
+				);
+				return $data;
+			}
+		}else{
+			$guru = $this->db->get_where('guru', ['nik' => $username])->row();
+			if($guru){
+				$user = $this->db->get_where('users', ['id_user' => $username])->row();
+				if($user){
+					if(password_verify($password, $user->password)) {
+						$data = array(
+							'status' => true,
+							'level' => 'guru',
+							'id_sekolah' => $user->id_sekolah,
+							'message' => 'berhasil'
+						);
+						return $data;
+					}else{
+						$data = array(
+							'status' => false,
+							'level' => 'guru',
+							'message' => 'Password Salah'
+						);
+						return $data;
+					}
+				}
+			}else{
+				$siswa = $this->db
+				->join('kelas', 'kelas.id_kelas = siswa.id_kelas')
+				->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan')
+				->get_where('siswa', ['siswa.nis' => $username])->row();
+				if($siswa){
+					$user = $this->db->get_where('users', ['id_user' => $username])->row();
+					if($user){
+						if(password_verify($password, $user->password)) {
+							$data = array(
+								'status' => true,
+								'level' => 'siswa',
+								'id_sekolah' => $siswa->id_sekolah,
+								'message' => 'berhasil'
+							);
+							return $data;
+						}else{
+							$data = array(
+								'status' => false,
+								'level' => 'siswa',
+								'message' => 'Password Salah'
+							);
+							return $data;
+						}
+					}
+				}else{
+					$data = array(
+						'status' => false,
+						'level' => 'false',
+						'message' => 'Username Salah'
+					);
+					return $data;
+				}
+			}
+			$data = array(
+				'status' => false,
+				'level' => 'false',
+				'message' => 'Username Salah'
+			);
+			return $data;
 		}
 	}
 

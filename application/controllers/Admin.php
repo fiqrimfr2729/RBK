@@ -24,21 +24,20 @@ class Admin extends CI_Controller {
         } elseif ($this->session->userdata('level') == 'siswa' || $this->session->userdata('level') == 'ortu') {
             redirect('users/dashboard');
         } else {
+            $id_sekolah = $this->session->userdata('id_sekolah');
             $data['menu']='dashboard';
             $data['content']='dashboard';
-            $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
-            $data['data_jurusan']=$this->M_data_master->get_jurusan()->num_rows();
-            $data['total_data_kelas']=$this->M_data_master->get_total_kelas()->num_rows();
-            $data['total_data_siswa']=$this->M_data_master->get_total_siswa()->num_rows();
+            $data['nama_sekolah'] = $this->M_data_master->get_nama_sekolah($id_sekolah);
+            $data['total_data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->num_rows();
+            $data['total_data_siswa']=$this->M_data_master->get_total_siswa($id_sekolah)->num_rows();
+            $data['total_data_jurusan']=$this->M_data_master->get_total_jurusan($id_sekolah)->num_rows();
             $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
-            $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->num_rows();
-            $data['data_kelas']=$this->M_data_absensi->get_kelas()->num_rows();
-            $data['data_pelanggaran']=$this->M_data_pelanggaran->get_pelanggaran()->num_rows();
-            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan()->num_rows();
-            $data['data_konseling']=$this->M_data_konseling->get_konseling()->num_rows();
-            $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
-            $data['data_tahun']=$this->M_data_bimbingan->get_tahun_bimbingan()->result_array();
-            $data['data_bulan']=$this->M_data_bimbingan->get_bulan_bimbingan()->result_array();
+            
+            $data['data_pelanggaran']=10;
+            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan($id_sekolah)->num_rows();
+            $data['data_konseling']=0;
+            $data['data_belum_dibaca']=array();
+
             // $data['data'] =  $this->session->userdata('id_user');
             $data['user'] = $this->M_data_users->get_data_user_by_id();
             // $test = $data['users'];
@@ -92,4 +91,9 @@ class Admin extends CI_Controller {
        $this->M_login->ubah_sandi($data,$id_users);
       redirect('admin/dashboard/');
    }
+
+   public function logout() {
+    $this->session->sess_destroy();
+    redirect(base_url('login'));
+  }
 }

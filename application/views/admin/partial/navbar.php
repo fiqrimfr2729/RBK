@@ -84,7 +84,7 @@
       <div class="modal-body">Pilih keluar jika anda ingin mengakhiri sesi.</div>
       <div class="modal-footer">
         <button class="btn btn-warning" type="button" data-dismiss="modal">Batal</button>
-        <a class="btn btn-danger" href="<?php echo base_url('login/logout') ?>">Keluar</a>
+        <a class="btn btn-danger" href="<?php echo base_url('admin/logout') ?>">Keluar</a>
       </div>
     </div>
   </div>

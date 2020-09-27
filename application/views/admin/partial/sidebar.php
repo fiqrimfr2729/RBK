@@ -47,14 +47,27 @@
       <div id="collapsePages" class="collapse <?php if(!empty($menu) && $menu == 'Data_master'){echo 'show';}; ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header"><b>Data Sekolah</b></h6>
-          <a class="collapse-item <?php if(!empty($mode) && $mode == 'jurusan'){echo 'active';}; ?>" href="<?php echo base_url('Data_master/jurusan') ?>"><b>Jurusan</b></a>
-          <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Data_master/kelas') ?>"><b>Kelas</b></a>
+          <a class="collapse-item <?php if(!empty($mode) && $mode == 'admin/jurusan'){echo 'active';}; ?>" href="<?php echo base_url('Jurusan') ?>"><b>Jurusan</b></a>
+          <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Kelas') ?>"><b>Kelas</b></a>
           <!-- <a class="collapse-item <?php if(!empty($mode) && $mode == 'siswa' && $menu =='Data_master'){echo 'active';}; ?>" href="<?php echo base_url('Data_master/siswa') ?>">Siswa</a> -->
           <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo site_url('Data_master/select_class'); ?>"><b>Siswa</b></a>
         </div>
       </div>
     </li>
 
+    <li class="nav-item <?php if($menu == 'alumni'){echo 'active';}; ?>">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAlumni" aria-expanded="true" aria-controls="collapsePages">
+        <i class="fas fa-folder-open"></i>
+        <b><span>Data Alumni</span></b>
+      </a>
+      <div id="collapseAlumni" class="collapse <?php if(!empty($menu) && $menu == 'Data_alumni'){echo 'show';}; ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header"><b>Data Alumni</b></h6>
+          <a class="collapse-item <?php if($mode == 'data_alumni'){echo 'active';}; ?>" href="<?php echo base_url('Alumni') ?>"><b>Alumni</b></a>
+          <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Kelas') ?>"><b>Universitas</b></a>
+        </div>
+      </div>
+    </li>
     
 
     <!-- Nav Item - Pages Collapse Menu -->

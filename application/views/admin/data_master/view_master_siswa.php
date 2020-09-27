@@ -28,7 +28,7 @@
           <?php foreach ($data_siswa as $siswa) { ?>
           <tr>
             <td align="center"><?php echo $no++; ?></td>
-            <td><?php echo $siswa['NIS'] ?></td>
+            <td><?php echo $siswa['nis'] ?></td>
             <td><?php echo $siswa['nama_lengkap'] ?></td>
             <!-- Read kelas siswa -->
             <td> 

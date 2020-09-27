@@ -4,140 +4,149 @@ class Login extends CI_Controller {
 
   public function __Construct() {
     parent::__Construct();
-    $this->load->model('M_login');
-    $this->load->model('M_data_master');
-    $this->load->model('M_data_absensi');
-    $this->load->model('M_data_users');
-    $this->load->library('session');
-    $this->load->helper('url');
-    $this->load->helper('captcha'); 
-  }
 
-  public function index() {
-    if ($this->session->userdata('logged_in')) {
+    if($this->session->userdata('logged_in')){
       if ($this->session->userdata('level')=='admin') {
         redirect('admin/dashboard');
       } elseif($this->session->userdata('level')=='siswa') {
         redirect('users/dashboard');
-      } elseif($this->session->userdata('level')=='ortu') {
-        redirect('ortu/dashboard');
       } else {
-      $path = './assets/captcha/';
-      if (!file_exists($path)) {
-        # code...
+        redirect('ortu/dashboard');
       }
+    }else{    
+      $this->load->model('M_login');
+      $this->load->model('M_data_master');
+      $this->load->model('M_data_absensi');
+      $this->load->model('M_data_users');
+      $this->load->library('session');
+      $this->load->helper('url');
+      $this->load->helper('captcha'); 
+    }
+    
+  }
 
-      $config = array(
-          'img_url' => base_url() . 'image_for_captcha/',
-          'img_path' => 'image_for_captcha/',
-          'img_height' => 45,
-          'word_length' => 5,
-          'img_width' => '45',
-          'font_size' => 10
-      );
-      $captcha = create_captcha($config);
-      $this->session->unset_userdata('valuecaptchaCode');
-      
-      $data['title']="Login";
-      $this->load->view('view_login',$data);
-     }
-   } else {
-     $config = array(
-          'img_url' => base_url() . 'image_for_captcha/',
-          'img_path' => 'image_for_captcha/',
-          'img_height' => 45,
-          'word_length' => 5,
-          'img_width' => '45',
-          'font_size' => 10
-      );
-     $captcha = create_captcha($config);
-    $this->session->unset_userdata('valuecaptchaCode');
-    $this->session->set_userdata('valuecaptchaCode', $captcha['word']);
-    $data['captchaImg'] = $captcha['image'];
+  public function index() {
     $data['title']="Login";
     $this->load->view('view_login',$data);
   }
-}
 
-public function login_validation() {
-  $this->load->library('form_validation');
-  $username = $this->input->post('username');
-  $password = md5($this->input->post('password'));
-  if ($this->M_login->verifikasi($username, $password)) {
-    $captcha_insert = $this->input->post('captcha');
-    $contain_sess_captcha = $this->session->userdata('valuecaptchaCode');
-    if ($captcha_insert === $contain_sess_captcha) {
-    $get_data = $this->M_login->get_data_login($username);
-      foreach ($get_data as $key) {
-        $id_user = $key->id_user;
-        if ($key->level == "admin") {
-          $sql = "SELECT * FROM admin WHERE id_user = '$id_user'";
-          $data_admin = $this->db->query($sql)->row_array();
-           $session_data['logged_in'] = true;
-          $session_data['NIK'] = $data_admin['NIK'];
-        $session_data['nama_lengkap'] = $data_admin['nama_admin'];
-        $session_data['email_admin'] = $data_admin['email_admin'];
-        $session_data['level'] = $key->level;
-        $session_data['username'] = $key->username;
-        $session_data['id_users'] = $key->id_users;
-        $session_data['id_user'] = $key->id_user;
-        $session_data['id_sekolah'] = $data_admin['id_sekolah'];
-        } elseif ($key->level == "guru") {
-           $sql = "SELECT * FROM guru WHERE id_user = '$id_user'";
-          $data_guru = $this->db->query($sql)->row_array();
+  public function login_validation() {
+    $this->load->library('form_validation');
+    $username = $this->input->post('username');
+    $password = $this->input->post('password');
 
-          $session_data['logged_in'] = true;
-        $session_data['NIK'] = $data_guru['nik'];
-        $session_data['nama_lengkap'] = $data_guru['nama_guru'];
-        $session_data['email_guru'] = $data_guru['email_guru'];
-        $session_data['id_tingkatan'] = $data_guru['id_tingkatan'];
-        $session_data['level'] = $key->level;
-        $session_data['username'] = $key->username;
-        $session_data['id_users'] = $key->id_users;
-        $session_data['id_user'] = $key->id_user;
-        $session_data['id_sekolah'] = $data_guru['id_sekolah'];
-        } elseif ($key->level == "siswa") {
-           $sql = "SELECT * FROM siswa WHERE id_user = '$id_user'";
-          $data_siswa = $this->db->query($sql)->row_array();
+    $user =  $this->M_login->verifikasi($username, $password);
 
-        $data = $this->db->get_where('siswa', ['id_user' => $id_user])->row()->id_kelas;
-        $id_tingkatan = $this->db->get_where('kelas', ['id_kelas' => $data])->row_array();
-        $session_data['logged_in'] = true;
-        $session_data['NIS'] = $data_siswa['NIS'];
-        $session_data['nama_lengkap'] = $data_siswa['nama_lengkap'];
-        $session_data['email_siswa'] = $data_siswa['email_siswa'];
-        $session_data['level'] = $key->level;
-        $session_data['username'] = $key->username;
-        $session_data['id_users'] = $key->id_users;
-        $session_data['id_user'] = $key->id_user;
-        $session_data['id_sekolah'] = $data_siswa['id_sekolah'];
-        $session_data['id_tingkatan'] = $id_tingkatan['id_tingkatan'];
-        } 
-         
+    echo var_dump($user);
+    if($user['status']){
+      if($user['level'] == 'admin') {
+        $data_session = array(
+            'logged_in' => true,
+            'username' => $username,
+            'status' => "login",
+            'id_sekolah' => $user['id_sekolah'],
+            'level' => 'admin'
+        );
+        $this->session->set_userdata($data_session);
+        redirect(base_url("/Admin/dashboard"));
+      }elseif($user['level']=='guru'){
+        $data_session = array(
+          'logged_in' => true,
+          'username' => $username,
+          'status' => "login",
+          'id_sekolah' => $user['id_sekolah'],
+          'level' => 'guru'
+        );
+        $this->session->set_userdata($data_session);
+        redirect(base_url("/Admin/dashboard"));
+      }elseif($user['level']=='siswa'){
+        $data_session = array(
+          'logged_in' => true,
+          'nis' => $username,
+          'status' => "login",
+          'id_sekolah' => $user['id_sekolah'],
+          'level' => 'siswa'
+        );
+        $this->session->set_userdata($data_session);
+        redirect(base_url("/Users/dashboard"));
       }
-        $this->session->set_userdata($session_data);
-        if ($this->session->userdata('level')=='admin') {
-          redirect('Admin/dashboard');
-        } elseif($this->session->userdata('level')=='siswa') {
-          redirect('Users/dashboard');
-        } elseif($this->session->userdata('level')=='guru') {
-           redirect('Admin/dashboard');
-        }
-      
-    } else {
-      $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Username atau password salah<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-        <span aria-hidden='true'>&times;</span>
-      </button></div>");
-      redirect(base_url());
     }
-    
-  } else {
-    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Username atau password salah<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-      <span aria-hidden='true'>&times;</span>
-    </button></div>");
-    redirect(base_url());
+
+
+    // if ($this->M_login->verifikasi($username, $password)) {
+      
+    //   if($user){
+    //   $get_data = $this->M_login->get_data_login($username);
+    //     foreach ($get_data as $key) {
+    //       $id_user = $key->id_user;
+    //       if ($key->level == "admin") {
+    //         $sql = "SELECT * FROM admin WHERE id_user = '$id_user'";
+    //         $data_admin = $this->db->query($sql)->row_array();
+    //         $session_data['logged_in'] = true;
+    //         $session_data['NIK'] = $data_admin['NIK'];
+    //       $session_data['nama_lengkap'] = $data_admin['nama_admin'];
+    //       $session_data['email_admin'] = $data_admin['email_admin'];
+    //       $session_data['level'] = $key->level;
+    //       $session_data['username'] = $key->username;
+    //       $session_data['id_users'] = $key->id_users;
+    //       $session_data['id_user'] = $key->id_user;
+    //       $session_data['id_sekolah'] = $data_admin['id_sekolah'];
+    //       } elseif ($key->level == "guru") {
+    //         $sql = "SELECT * FROM guru WHERE id_user = '$id_user'";
+    //         $data_guru = $this->db->query($sql)->row_array();
+
+    //         $session_data['logged_in'] = true;
+    //       $session_data['NIK'] = $data_guru['nik'];
+    //       $session_data['nama_lengkap'] = $data_guru['nama_guru'];
+    //       $session_data['email_guru'] = $data_guru['email_guru'];
+    //       $session_data['id_tingkatan'] = $data_guru['id_tingkatan'];
+    //       $session_data['level'] = $key->level;
+    //       $session_data['username'] = $key->username;
+    //       $session_data['id_users'] = $key->id_users;
+    //       $session_data['id_user'] = $key->id_user;
+    //       $session_data['id_sekolah'] = $data_guru['id_sekolah'];
+    //       } elseif ($key->level == "siswa") {
+    //         $sql = "SELECT * FROM siswa WHERE id_user = '$id_user'";
+    //         $data_siswa = $this->db->query($sql)->row_array();
+
+    //       $data = $this->db->get_where('siswa', ['id_user' => $id_user])->row()->id_kelas;
+    //       $id_tingkatan = $this->db->get_where('kelas', ['id_kelas' => $data])->row_array();
+    //       $session_data['logged_in'] = true;
+    //       $session_data['NIS'] = $data_siswa['NIS'];
+    //       $session_data['nama_lengkap'] = $data_siswa['nama_lengkap'];
+    //       $session_data['email_siswa'] = $data_siswa['email_siswa'];
+    //       $session_data['level'] = $key->level;
+    //       $session_data['username'] = $key->username;
+    //       $session_data['id_users'] = $key->id_users;
+    //       $session_data['id_user'] = $key->id_user;
+    //       $session_data['id_sekolah'] = $data_siswa['id_sekolah'];
+    //       $session_data['id_tingkatan'] = $id_tingkatan['id_tingkatan'];
+    //       } 
+          
+    //     }
+    //       $this->session->set_userdata($session_data);
+    //       if ($this->session->userdata('level')=='admin') {
+    //         redirect('Admin/dashboard');
+    //       } elseif($this->session->userdata('level')=='siswa') {
+    //         redirect('Users/dashboard');
+    //       } elseif($this->session->userdata('level')=='guru') {
+    //         redirect('Admin/dashboard');
+    //       }
+        
+    //   } else {
+    //     $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Username atau password salah<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+    //       <span aria-hidden='true'>&times;</span>
+    //     </button></div>");
+    //     redirect(base_url());
+    //   }
+      
+    // } else {
+    //   $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Username atau password salah<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+    //     <span aria-hidden='true'>&times;</span>
+    //   </button></div>");
+    //   redirect(base_url());
+    // }
   }
-}
 
 public function forgot_password() {
   $this->load->view('forgot_password');
@@ -261,22 +270,6 @@ public function do_reset_password(){
   redirect('login/reset_password/'.$id);
 }
 
-
-public function logout() {
-  $this->session->unset_userdata('id_users');
-  $this->session->unset_userdata('id_user');
-  $this->session->unset_userdata('id_sekolah');
-  $this->session->unset_userdata('nama_lengkap');
-  $this->session->unset_userdata('nama_admin');
-  $this->session->unset_userdata('nama_guru');
-  $this->session->unset_userdata('email_admin');
-  $this->session->unset_userdata('email_guru');
-  $this->session->unset_userdata('email_siswa');
-  $this->session->unset_userdata('username');
-  $this->session->unset_userdata('password');
-  $this->session->unset_userdata('level');
-  redirect(base_url());
-}
     public function refresh()
     {
         $config = array(
@@ -291,6 +284,11 @@ public function logout() {
         $this->session->unset_userdata('valuecaptchaCode');
         $this->session->set_userdata('valuecaptchaCode', $captcha['word']);
         echo $captcha['image'];
+    }
+
+    public function logout() {
+      $this->session->sess_destroy();
+      redirect(base_url('login'));
     }
 }
 

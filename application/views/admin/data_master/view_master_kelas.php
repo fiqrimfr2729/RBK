@@ -7,7 +7,7 @@
     <h6 class="float-left text-primary font-weight-bold" style="margin-top: 10px">Data  Kelas</h6>
     <?php if ($this->session->userdata('level') == "admin") { ?>
     <a href="javascript:;" class="btn btn-info float-right" data-toggle="modal" data-target="#tambahKelas">Tambah Kelas</a>
-    <a href="javascript:;" class="btn btn-success float-right" data-toggle="modal" data-target="#updateTingkat">Perbarui Tingkatan</a><?php } ?>
+    <a href="javascript:;" style="margin-right: 10px" class="btn btn-success float-right" data-toggle="modal" data-target="#updateTingkat">Perbarui Tingkatan</a><?php } ?>
   </div>
   <div class="card-body">
     <div class="table-responsive">
@@ -16,6 +16,7 @@
           <tr>
             <th width="5%">No</th>
             <th>Nama Kelas</th>
+            <th>Jurusan</th>
             <th>Tahun Masuk</th>
              <?php if ($this->session->userdata('level') == "admin") { ?>
               <th width="30%">Aksi</th>
@@ -27,7 +28,8 @@
           <?php foreach ($data_kelas as $kelas) { ?>
             <tr>
               <td align="center"><?php echo $no++; ?></td>
-              <td><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></td>
+              <td align="center"><?php if($kelas['tingkatan']==1){echo 'X';}elseif($kelas['tingkatan']==2){echo 'XI';}else{echo 'XII';} echo ' '.$kelas['singkatan_jurusan'].' '.$kelas['urutan_kelas']; ?></td>
+              <td align="center"><?php echo $kelas['nama_jurusan'] ?></td>
               <td align="center"><?php echo $kelas['tahun_masuk'] ?></td>
                   <?php if ($this->session->userdata('level') == "admin") { ?>
               <td align="center">
@@ -53,14 +55,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" action="<?php echo base_url('data_master/add_kelas'); ?>" method="post">
+        <form class="user" action="<?php echo base_url('Kelas/add_kelas'); ?>" method="post">
           <div class="form-group">
             <label>Tingkatan Kelas</label>
             <select name="tingkatan" class="form-control">
               <option selected="" disabled="">-- Silahkan Pilih --</option>
-              <?php foreach ($data_tingkatan as $tingkatan) { ?>
-                <option value="<?php echo $tingkatan['id_tingkatan'] ?>"><?php echo $tingkatan['tingkatan'] ?> - <?php echo $tingkatan['nama_tingkatan'] ?></option>
-              <?php } ?>
+              <option value="1">X - Sepuluh</option>
+              <option value="2">XI - Sebelas</option>
+              <option value="3">XII - Dua Belas</option>
             </select>
           </div>
           <div class="form-group">
@@ -73,12 +75,12 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Urutan Kelas</label>
-            <input type="text" class="form-control form-control" name="urutan" placeholder="masukkan urutan kelas" autocomplete="off" required="">
+            <label>Jumlah Kelas</label>
+            <input type="number" class="form-control form-control" name="jumlah_kelas" value="0" autocomplete="off" required="">
           </div>
           <div class="form-group">
             <label>Tahun Masuk</label>
-            <input type="text" class="form-control form-control" name="tahun_masuk" placeholder="masukkan tahun masuk kelas" autocomplete="off" required="">
+            <input type="number" class="form-control form-control" name="tahun_masuk" value="2020" autocomplete="off" required="">
           </div>
           <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
             Simpan </font>
@@ -100,7 +102,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" action="<?php echo base_url('data_master/naik_kelas'); ?>" method="post">
+        <form class="user" action="<?php echo base_url('kelas/naik_kelas'); ?>" method="post">
           Memperbarui tingkatan kelas akan mengubah semua tingkatan kelas 1 tingkat lebih tinggi
           <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
             Perbarui </font>
@@ -123,14 +125,18 @@
           </button>
         </div>
         <div class="modal-body">
-            <form class="user" action="<?php echo base_url('data_master/edit_kelas/'.$kelas['id_kelas']); ?>" method="post">
+            <form class="user" action="<?php echo base_url('kelas/edit_kelas/'); ?>" method="post">
+            <div class="form-group">
+               
+                <input type="hidden" class="form-control form-control" name="id_kelas" placeholder="masukkan tahun masuk kelas" autocomplete="off" value="<?php echo $kelas['id_kelas'] ?>" required="">
+              </div>
               <div class="form-group">
                 <label>Tingkatan Kelas</label>
                 <select name="tingkatan" class="form-control">
                   <option selected="" disabled="">-- Silahkan Pilih --</option>
-                  <?php foreach ($data_tingkatan as $tingkatan) { ?>
-                    <option <?php if($tingkatan['id_tingkatan']==$kelas['id_tingkatan']){echo"selected";} ?> value="<?php echo $tingkatan['id_tingkatan'] ?>"><?php echo $tingkatan['tingkatan'] ?> - <?php echo $tingkatan['nama_tingkatan'] ?></option>
-                  <?php } ?>
+                  <option <?php if($kelas['tingkatan']==1){echo 'selected';} ?> value="1">X - Sepuluh</option>
+                  <option <?php if($kelas['tingkatan']==2){echo 'selected';} ?> value="2">XI - Sebelas</option>
+                  <option <?php if($kelas['tingkatan']==3){echo 'selected';} ?> value="3">XII - Dua Belas</option>
                 </select>
               </div>
               <div class="form-group">
@@ -144,11 +150,11 @@
               </div>
               <div class="form-group">
                 <label>Urutan Kelas</label>
-                <input type="text" class="form-control form-control" name="urutan" placeholder="Urutan kelas" autocomplete="off" value="<?php echo $kelas['urutan_kelas'] ?>" required="">
+                <input type="number" class="form-control form-control" name="urutan" placeholder="Urutan kelas" autocomplete="off" value="<?php echo $kelas['urutan_kelas'] ?>" required="">
               </div>
               <div class="form-group">
                 <label>Tahun Masuk</label>
-                <input type="text" class="form-control form-control" name="tahun_masuk" placeholder="masukkan tahun masuk kelas" autocomplete="off" value="<?php echo $kelas['tahun_masuk'] ?>" required="">
+                <input type="number" class="form-control form-control" name="tahun_masuk" placeholder="masukkan tahun masuk kelas" autocomplete="off" value="<?php echo $kelas['tahun_masuk'] ?>" required="">
               </div>
               <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
                 Simpan </font>

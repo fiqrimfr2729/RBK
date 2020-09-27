@@ -3,9 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_data_bimbingan extends CI_Model {
 
-	public function get_bimbingan(){
-		$id_sekolah = $this->session->userdata('id_sekolah');
-		return $this->db->get_where('bimbingan', ['id_sekolah' => $id_sekolah] );
+	public function get_bimbingan($id_sekolah){
+		$this->db->select('*')->from('bimbingan')
+		->join('siswa', 'siswa.nis = bimbingan.nis')
+		->join('kelas', 'siswa.id_kelas = kelas.id_kelas')
+		->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan')
+		->join('sekolah', 'sekolah.id_sekolah = jurusan.id_sekolah');
+		return $this->db->where('sekolah.id_sekolah', $id_sekolah)->get();
 	}
 
 	public function get_kunjungan_bimbingan_tahun($tahun){

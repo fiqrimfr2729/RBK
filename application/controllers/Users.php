@@ -20,17 +20,17 @@ class Users extends CI_Controller {
 
     public function dashboard(){
         $data['content']='users/dashboard';
-        if (!empty($this->session->userdata('NIS'))) {
-            $data_siswa = $this->M_data_master->get_siswa_by_nis($this->session->userdata('NIS'))->result_array();
+        if (!empty($this->session->userdata('nis'))) {
+            $data_siswa = $this->M_data_master->get_siswa_by_nis($this->session->userdata('nis'))->result_array();
         } else {
-            $data_siswa = $this->M_data_master->get_siswa_by_nisn($this->session->userdata('NIS'))->result_array();
+            $data_siswa = $this->M_data_master->get_siswa_by_nisn($this->session->userdata('nis'))->result_array();
         }
         $data['data_siswa']= $data_siswa;
-        $data['notif_balasan']=$this->M_data_bimbingan->get_bimbingan_sudah_dibalas($this->session->userdata('NIS'))->result_array();
-        $data['notif_konseling']=$this->M_data_konseling->get_konseling_belum_dibaca($this->session->userdata('NIS'))->result_array();
+        $data['notif_balasan']=array();
+        $data['notif_konseling']=array();
 
-        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('NIS'))->result_array();
-        $data['data_konseling']=$this->M_data_konseling->get_konseling_where_users_nis()->result_array();
+        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('nis'))->result_array();
+        $data['data_konseling']=array();
         $this->load->view('users/partial/tpl_index',$data);
     }
 
@@ -93,15 +93,14 @@ class Users extends CI_Controller {
     }
 
     public function kirim_bimbingan(){
+        $siswa = $this->M_data_master->get_siswa_by_nis($this->session->userdata('nis'))->row();
         $data = array(
-            'NIS' => $this->session->userdata('NIS'),
+            'nis' => $this->session->userdata('nis'),
             'subjek' => $this->input->post('subjek'),
-            'id_sekolah' => $this->session->userdata('id_sekolah'),
-            'id_users' => $this->session->userdata('id_users'),
             'isi_bimbingan' => $this->input->post('isi_bimbingan'),
-            'id_tingkatan' => $this->session->userdata('id_tingkatan'),
-            'tanggal_bimbingan' => date('Y-m-d H:i:s'),
-            'tanggal' => date('Y-m-d')
+            'tanggal' => date('Y-m-d H:i:s'),
+            'dibaca' => false,
+            'tingkatan' =>$siswa->tingkatan
         );
         // var_dump($data);exit();
 
@@ -160,11 +159,15 @@ class Users extends CI_Controller {
             $data_siswa = $this->M_data_master->get_siswa_by_nisn($this->session->userdata('NIS'))->result_array();
         }
         $data['data_siswa']= $data_siswa;
-        $data['notif_balasan']=$this->M_data_bimbingan->get_bimbingan_sudah_dibalas($this->session->userdata('NIS'))->result_array();
-        $data['notif_konseling']=$this->M_data_konseling->get_konseling_belum_dibaca($this->session->userdata('NIS'))->result_array();
+        //$data['notif_balasan']=$this->M_data_bimbingan->get_bimbingan_sudah_dibalas($this->session->userdata('NIS'))->result_array();
+        $data['notif_balasan']=array();
+        //$data['notif_konseling']=$this->M_data_konseling->get_konseling_belum_dibaca($this->session->userdata('NIS'))->result_array();
+        $data['notif_konseling']=array();
 
-        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('NIS'))->result_array();
-        $data['data_konseling']=$this->M_data_konseling->get_konseling_where_users_nis()->result_array();
+        //$data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('NIS'))->result_array();
+        $data['data_bimbingan']=array();
+        //$data['data_konseling']=$this->M_data_konseling->get_konseling_where_users_nis()->result_array();
+        $data['data_konseling']=array();
         $this->load->view('users/partial/tpl_index',$data);
 
     }
@@ -217,4 +220,9 @@ class Users extends CI_Controller {
         $data['notif_konseling']=$this->M_data_konseling->get_konseling_belum_dibaca($this->session->userdata('NIS'))->result_array();
         $this->load->view('users/partial/tpl_index',$data);
     }
+
+    public function logout() {
+        $this->session->sess_destroy();
+        redirect(base_url('login'));
+      }
 }

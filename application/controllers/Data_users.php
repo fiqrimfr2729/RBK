@@ -1,6 +1,7 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+use Google\Cloud\Firestore\FirestoreClient;
 
 class Data_users extends CI_Controller
 {
@@ -13,6 +14,7 @@ class Data_users extends CI_Controller
         $this->load->model('M_data_bimbingan');
         $this->load->helper('url');
         $this->load->library('session');
+
     }
 
     public function index(){

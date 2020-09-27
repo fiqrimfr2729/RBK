@@ -16,6 +16,7 @@
           <tr>
             <th width="5%">No</th>
             <th>Nama Jurusan</th>
+            <th>Singkatan Jurusan</th>
             <?php if ($this->session->userdata('level') == "admin") { ?>
               <th width="30%">Aksi</th>
             <?php } ?>
@@ -27,9 +28,11 @@
             <tr>
               <td align="center"><?php echo $no++; ?></td>
               <td><?php echo $jurusan['nama_jurusan'] ?></td>
+              <td><?php echo $jurusan['singkatan_jurusan'] ?></td>
                <?php if ($this->session->userdata('level') == "admin") { ?>
               <td align="center">
-                <a href="<?=base_url('data_master/hapusJurusan/' . $jurusan['id_jurusan'])?>" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</a>
+                <a href="" data-toggle="modal" data-target="#editJurusan<?php echo $jurusan['id_jurusan'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                <a href="" data-toggle="modal" data-target="#hapusJurusan<?php echo $jurusan['id_jurusan'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</a>
               </td>
                   <?php } ?>
             </tr>
@@ -52,10 +55,14 @@
         </button>
       </div>
       <div class="modal-body">
-          <form class="user" action="<?php echo base_url('data_master/add_jurusan'); ?>" method="post">
+          <form class="user" action="<?php echo base_url('jurusan/add_jurusan'); ?>" method="post">
             <div class="form-group">
               <label>Nama Jurusan</label>
               <input type="text" class="form-control form-control" name="jurusan" placeholder="Masukkan nama jurusan" autocomplete="off" required="">
+            </div>
+            <div class="form-group">
+              <label>Singkatan Jurusan</label>
+              <input type="text" class="form-control form-control" name="singkatan" placeholder="Masukkan nama jurusan" autocomplete="off" required="">
             </div>
             <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">Simpan </font>
             </button>
@@ -67,7 +74,7 @@
 
 <!-- Edit Jurusan Modal-->
 <?php foreach ($data_jurusan as $jurusan) { ?>
-  <div class="modal fade" id="editJurusan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editJurusan<?php echo $jurusan['id_jurusan'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -77,11 +84,15 @@
           </button>
         </div>
         <div class="modal-body">
-            <form class="user" action="<?php echo base_url('data_master/edit_jurusan/'.$jurusan['id_jurusan']); ?>" method="post">
+            <form class="user" action="<?php echo base_url('jurusan/edit_jurusan/'.$jurusan['id_jurusan']); ?>" method="post">
               <div class="form-group">
                 <label>Nama Jurusan</label>
                 <input type="text" class="form-control form-control" name="jurusan" placeholder="Nama jurusan" autocomplete="off" value="<?php echo $jurusan['nama_jurusan'] ?>" required="">
               </div>
+              <div class="form-group">
+              <label>Singkatan Jurusan</label>
+              <input type="text" class="form-control form-control" name="singkatan" placeholder="Masukkan nama jurusan" value="<?php echo $jurusan['singkatan_jurusan'] ?>" autocomplete="off" required="">
+            </div>
               <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
                 Simpan </font>
               </button>
@@ -106,7 +117,7 @@
         <div class="modal-body">Klik Ya jika anda yakin</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-          <a class="btn btn-primary" href="<?php echo base_url('data_master/delete_jurusan/'.$jurusan['id_jurusan']) ?>">Ya</a>
+          <a class="btn btn-primary" href="<?php echo base_url('jurusan/delete_jurusan/'.$jurusan['id_jurusan']) ?>">Ya</a>
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
   <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+require 'vendor/autoload.php';
+use Google\Cloud\Firestore\FirestoreClient;
 
 class Data_bimbingan extends CI_Controller
 {
@@ -70,5 +72,26 @@ class Data_bimbingan extends CI_Controller
                             </button></div>");
         }
         redirect('data_bimbingan/baca_bimbingan/'.$id_bimbingan);
+    }
+
+    public function get_bimbingan(){
+        $config = [
+            'keyFilePath' => './bimkos-d7a96-firebase-adminsdk-15us9-4475d82d63.json',
+            'projectId' => "bimkos-d7a96",
+        ];
+    
+
+        $firestore = new FirestoreClient($config);
+        
+
+        $usersRef = $firestore->collection('messages')->document('200820040805')->collection('200820040805');
+        $snapshot = $usersRef->documents();
+
+        foreach ($snapshot as $user) {
+            echo ($user->id()) . " ";
+        }
+        
+
+        echo sprintf('Found %d documents!', $snapshot->size());
     }
 }
