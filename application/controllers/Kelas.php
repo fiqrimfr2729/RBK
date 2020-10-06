@@ -123,6 +123,20 @@ class Kelas extends CI_Controller
 
     }
 
+    public function delete_kelas($id_kelas){
+        if ($this->M_data_master->delete_kelas($id_kelas)) {
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil hapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+          </button></div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal dihapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+          </button></div>");
+        }
+        redirect('/kelas');
+
+    }
+
 }
 
 ?>

@@ -9,12 +9,16 @@
   <div class="card-body">
     <div class="table-responsive">
       <form action="<?php echo site_url('Data_absensi/tampil_kelas'); ?>" method="GET">
+      <div class="form-group">
+        <label>Tanggal</label>
+        <input type="date" placeholder="Tanggal" value="bb" name="tanggal" class="form-control" required="">
+      </div>
        <div class="form-group">
-        <label>Pilih Kelas</label>
+        <label>Kelas</label>
         <select name="id_kelas" class="form-control" style="max-width: 300px;">
-          <option selected="" disabled="">-- Silahkan Pilih --</option>
+          <option selected="" disabled=""> Pilih Kelas </option>
           <?php foreach ($kelas as $key => $value) { ?>
-          <option value="<?php echo $value->id_kelas ?>"><?php echo $value->tingkatan ?> <?php echo $value->nama_jurusan ?> <?php echo $value->urutan_kelas ?></option>
+          <option value="<?php echo $value->id_kelas ?>"><?php if($value->tingkatan=='1'){echo "X";}elseif($value->tingkatan=='2'){echo "XI";}else{echo "XII";} ?> <?php echo $value->nama_jurusan ?> <?php echo $value->urutan_kelas ?></option>
           <?php } ?>
         </select>
       </div>

@@ -30,7 +30,7 @@ class M_login extends CI_Model {
 						$data = array(
 							'status' => true,
 							'level' => 'guru',
-							'id_sekolah' => $user->id_sekolah,
+							'id_sekolah' => $guru->id_sekolah,
 							'message' => 'berhasil'
 						);
 						return $data;

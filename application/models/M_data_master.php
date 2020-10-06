@@ -51,10 +51,10 @@ class M_data_master extends CI_Model {
 	}
 
 	function tampilkan_siswa($id_kelas) {
-		$this->db->from('kelas');
+		$this->db->from('siswa');
+		$this->db->join('kelas','siswa.id_kelas=kelas.id_kelas');
 		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
-		$this->db->join('siswa','siswa.id_kelas=kelas.id_kelas');
-		$this->db->where('kelas.id_kelas',$id_kelas);
+		$this->db->where('siswa.id_kelas',$id_kelas);
 		$this->db->order_by('siswa.nama_siswa','ASC');
 		$sql_siswa=$this->db->get();
 		return $sql_siswa;
@@ -73,6 +73,10 @@ class M_data_master extends CI_Model {
 		return $this->db->get_where('jurusan', ['jurusan.id_sekolah' => $id_sekolah]);
 	}
 
+	public function get_jurusan_by_id($id_jurusan){
+		return $this->db->get_where('jurusan', ['jurusan.id_jurusan' => $id_jurusan])->row();
+	}
+
 	public function add_jurusan($data){
 		return $this->db->insert('jurusan', $data);
 		
@@ -83,12 +87,17 @@ class M_data_master extends CI_Model {
 	}
 
 	public function delete_jurusan($id_jurusan){
-		return $this->db->where('id_jurusan', $id_jurusan)
-		->delete('jurusan');
+		$kelas = $this->db->from('kelas')->where('id_jurusan', $id_jurusan)->get()->result();
+		if(sizeof($kelas)==0){
+			return $this->db->where('id_jurusan', $id_jurusan)->delete('jurusan');
+		}else{
+			return false;
+		}
 	}
 
 	public function get_kelas($id_sekolah){
 		$this->db->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan');
+		$this->db->order_by('kelas.urutan_kelas','ASC');
 		$this->db->where('tingkatan', '1')->or_where('tingkatan', '2')->or_where('tingkatan', '3');
 		return $this->db->get_where('kelas', ['jurusan.id_sekolah' => $id_sekolah]);
 	}
@@ -198,5 +207,11 @@ class M_data_master extends CI_Model {
 	public function get_nama_sekolah($id_sekolah){
 		return $this->db->where('id_sekolah', $id_sekolah)->get('sekolah')->row()->nama_sekolah;
 	}
+
+	public function get_guru($nik){
+        $guru = $this->db->from('guru')->where('nik', $nik)->get()->row();
+        return $guru;
+    }
+
 
 }

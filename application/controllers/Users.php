@@ -85,10 +85,12 @@ class Users extends CI_Controller {
             $this->M_data_bimbingan->edit_bimbingan($notif, $data);
         }
 
-        $data['notif_konseling']=$this->M_data_konseling->get_konseling_belum_dibaca($this->session->userdata('NIS'))->result_array();
-        $data['notif_balasan']=$this->M_data_bimbingan->get_bimbingan_sudah_dibalas($this->session->userdata('NIS'))->result_array();
+        $data['notif_konseling']=array();
+        $data['notif_balasan']=array();
         $data['content']='users/view_bimbingan';
-        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('NIS'))->result_array();
+        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('nis'))->result_array();
+        
+        //echo var_dump($data['data_bimbingan']);
         $this->load->view('users/partial/tpl_index',$data);
     }
 
@@ -97,8 +99,8 @@ class Users extends CI_Controller {
         $data = array(
             'nis' => $this->session->userdata('nis'),
             'subjek' => $this->input->post('subjek'),
-            'isi_bimbingan' => $this->input->post('isi_bimbingan'),
-            'tanggal' => date('Y-m-d H:i:s'),
+            'isi_bim' => $this->input->post('isi_bimbingan'),
+            'tgl_bim' => date('Y-m-d H:i:s'),
             'dibaca' => false,
             'tingkatan' =>$siswa->tingkatan
         );
@@ -124,9 +126,9 @@ class Users extends CI_Controller {
         $data['kelas']=$this->M_data_absensi->pilih_kelas();
         $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
         $data['data_absensi']=$this->M_data_absensi->get_absensi();
-        $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-        $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+        $data['data_jurusan']=array();
+        $data['data_tingkatan']=array();
+        $data['data_belum_dibaca']=array();
         $this->load->view('users/partial/tpl_index',$data);
     }
 
@@ -182,11 +184,11 @@ class Users extends CI_Controller {
             $data_siswa = $this->M_data_master->get_siswa_by_nisn($this->session->userdata('NIS'))->result_array();
         }
         $data['data_siswa']= $data_siswa;
-        $data['notif_balasan']=$this->M_data_bimbingan->get_bimbingan_sudah_dibalas($this->session->userdata('NIS'))->result_array();
-        $data['notif_konseling']=$this->M_data_konseling->get_konseling_belum_dibaca($this->session->userdata('NIS'))->result_array();
+        $data['notif_balasan']=array();
+        $data['notif_konseling']=array();
 
-        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_users($this->session->userdata('NIS'))->result_array();
-        $data['data_konseling']=$this->M_data_konseling->get_konseling_where_users_nis()->result_array();
+        $data['data_bimbingan']=array();
+        $data['data_konseling']=array();
         $this->load->view('users/partial/tpl_index',$data);
 
     }
@@ -224,5 +226,5 @@ class Users extends CI_Controller {
     public function logout() {
         $this->session->sess_destroy();
         redirect(base_url('login'));
-      }
+    }
 }

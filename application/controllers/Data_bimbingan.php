@@ -20,14 +20,31 @@ class Data_bimbingan extends CI_Controller
             redirect('login');
         } elseif ($this->session->userdata('level') == 'siswa' || $this->session->userdata('level') == 'ortu') {
             redirect('users/dashboard');
-        } else {
+        }elseif ($this->session->userdata('level') == 'guru') {
+            $id_sekolah = $this->session->userdata('id_sekolah');
+            $nik = $this->session->userdata('nik');
+            $guru = $this->M_data_master->get_guru($nik);
             $data['menu']='data_bimbingan';
+            $data['mode']='bimbingan';
             $data['content']='data_bimbingan/view_bimbingan';
             $data['user'] = $this->M_data_users->get_data_user_by_id();
-            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan()->result_array();
-            $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
-            $data['data_kelas']=$this->M_data_master->get_kelas()->result_array();
-            $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
+            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan($id_sekolah, $nik)->result_array();
+            $data['data_belum_dibaca']=array();
+            $data['data_kelas']=array();
+            $data['data_siswa']=array();
+        	$this->load->view('admin/partial/index_admin',$data);
+        }else {
+            $id_sekolah = $this->session->userdata('id_sekolah');
+            $nik = $this->session->userdata('nik');
+            $guru = $this->M_data_master->get_guru($nik);
+            $data['menu']='data_bimbingan';
+            $data['mode']='bimbingan';
+            $data['content']='data_bimbingan/view_bimbingan';
+            $data['user'] = $this->M_data_users->get_data_user_by_id();
+            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_admin($id_sekolah)->result_array();
+            $data['data_belum_dibaca']=array();
+            $data['data_kelas']=array();
+            $data['data_siswa']=array();
         	$this->load->view('admin/partial/index_admin',$data);
         }
     }
@@ -74,24 +91,82 @@ class Data_bimbingan extends CI_Controller
         redirect('data_bimbingan/baca_bimbingan/'.$id_bimbingan);
     }
 
-    public function get_bimbingan(){
+    public function get_bimbingan($id_bimbingan){
         $config = [
             'keyFilePath' => './bimkos-d7a96-firebase-adminsdk-15us9-4475d82d63.json',
             'projectId' => "bimkos-d7a96",
         ];
-    
-
         $firestore = new FirestoreClient($config);
-        
 
-        $usersRef = $firestore->collection('messages')->document('200820040805')->collection('200820040805');
+
+        $bimbingan =$this->M_data_bimbingan->get_bimbingan_where_id($id_bimbingan)->row(); 
+
+        $usersRef = $firestore->collection('messages')->document($id_bimbingan)->collection($id_bimbingan);
         $snapshot = $usersRef->documents();
 
-        foreach ($snapshot as $user) {
-            echo ($user->id()) . " ";
+        echo "Siswa : $bimbingan->nama_siswa <br>";
+        echo "Tanggal : $bimbingan->tgl_bim <br>";
+        echo "Subjek : $bimbingan->subjek <br><br>";
+
+        foreach ($snapshot as $bimbingan) {
+            echo ('bimbingan') . " : " . $bimbingan['content'] . "<br>";
+            echo ('dari') . " : " . $bimbingan['idFrom'] . "<br>";
+            echo ('untuk') . " : " . $bimbingan['idTo'] . "<br>";
+            echo "<br>";
         }
-        
 
         echo sprintf('Found %d documents!', $snapshot->size());
+    }
+
+    public function bimbingan($id_bimbingan){
+        $config = [
+            'keyFilePath' => './bimkos-d7a96-firebase-adminsdk-15us9-4475d82d63.json',
+            'projectId' => "bimkos-d7a96",
+        ];
+        $firestore = new FirestoreClient($config);
+
+
+        $bimbingan =$this->M_data_bimbingan->get_bimbingan_where_id($id_bimbingan)->row(); 
+
+        $usersRef = $firestore->collection('messages')->document($id_bimbingan)->collection($id_bimbingan);
+        $snapshot = $usersRef->documents();
+
+        // echo var_dump($snapshot);
+
+        $data['data_bimbingan'] = $bimbingan;
+        $data['isi_bimbingan'] = $snapshot;
+
+        
+        $data['user'] = $this->M_data_users->get_data_user_by_id();
+    
+        $data['menu']='data_bimbingan';
+        $data['mode']='bimbingan';
+
+        $data['content']='data_bimbingan/view_bimbingan/view_bimbingan_guru';
+        $data['user'] = $this->M_data_users->get_data_user_by_id();
+        $data['data_belum_dibaca']=array();
+        $data['data_kelas']=array();
+        $data['data_siswa']=array();
+        $this->load->view('admin/data_bimbingan/view_bimbingan/view_bimbingan_guru', $data);
+    }
+
+    public function get_bimbingan_siswa($nis){
+        if(!$this->session->userdata('logged_in')){
+            redirect('login');
+        } elseif ($this->session->userdata('level') == 'siswa' || $this->session->userdata('level') == 'ortu') {
+            redirect('users/dashboard');
+        } else {
+            $id_sekolah = $this->session->userdata('id_sekolah');
+            
+            $data['menu']='data_bimbingan';
+            $data['mode']='bimbingan';
+            $data['content']='data_bimbingan/view_bimbingan_siswa';
+            $data['user'] = $this->M_data_users->get_data_user_by_id();
+            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_siswa($nis)->result_array();
+            $data['data_belum_dibaca']=array();
+            $data['data_kelas']=array();
+            $data['data_siswa']=array();
+        	$this->load->view('admin/partial/index_admin',$data);
+        }
     }
 }

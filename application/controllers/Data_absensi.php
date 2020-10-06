@@ -36,11 +36,11 @@ class Data_absensi extends CI_Controller
         foreach ($id_siswa as $key => $item) 
         {
             $insert_data[] = array(
-                'NIS' => $item,
+                'nis' => $item,
                 'keterangan'=> $keterangan[$key],
-                'id_jurusan' => $id_jurusan[$key],
+                
                 'tanggal' => $date,
-                'id_sekolah' => $id_sekolah,
+                
             );
         }
         //print_r($insert_data);die;
@@ -140,11 +140,25 @@ public function select_class() {
     $data['content']='data_absensi/view_absensi_pilih_kelas';
     $data['user'] = $this->M_data_users->get_data_user_by_id();
     $data['kelas']=$this->M_data_absensi->pilih_kelas();
-    $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
-    $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
-    $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    $data['data_kelas']=array();
+    $data['data_siswa']=array();
+    $data['data_jurusan']=array();
+    $data['data_tingkatan']=array();
+    $data['data_belum_dibaca']=array();
+    $this->load->view('admin/partial/index_admin',$data);
+}
+
+public function select_class_absen() {
+    $data['menu']='data_absensi';
+    $data['mode']='kelas';
+    $data['content']='data_absensi/view_absensi_pilih_kelas';
+    $data['user'] = $this->M_data_users->get_data_user_by_id();
+    $data['kelas']=$this->M_data_absensi->pilih_kelas();
+    $data['data_kelas']=array();
+    $data['data_siswa']=array();
+    $data['data_jurusan']=array();
+    $data['data_tingkatan']=array();
+    $data['data_belum_dibaca']=array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -156,10 +170,10 @@ public function rekap_absensi() {
     $data['user'] = $this->M_data_users->get_data_user_by_id();
     $data['kelas']=$this->M_data_absensi->pilih_kelas();
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
-    $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
-    $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    $data['data_siswa']=array();
+    $data['data_jurusan']=array();
+    $data['data_tingkatan']=array();
+    $data['data_belum_dibaca']=array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -173,8 +187,8 @@ public function lihat_absensi() {
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
     $data['data_absensi']=$this->M_data_absensi->get_absensi();
     $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    $data['data_tingkatan']=array();
+    $data['data_belum_dibaca']=array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -183,14 +197,18 @@ public function tampil_kelas() {
     $data['menu']='data_absensi';
     $data['mode']='kelas';
     $id_kelas=$this->input->GET('id_kelas',TRUE);
+    $tanggal=$this->input->GET('tanggal',TRUE);
     $data['user'] = $this->M_data_users->get_data_user_by_id();
     $data['kelas']=$this->M_data_absensi->get_kelas_sekarang($id_kelas)->result_array();
-    $data['data_siswa']=$this->M_data_absensi->tampilkan_siswa($id_kelas)->result_array();
+    $data['data_siswa']=$this->M_data_absensi->tampilkan_siswa($id_kelas, $tanggal);
     $data['content']='data_absensi/view_absensi_tampil_kelas';
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
-    $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    $data['tanggal'] = $tanggal;
+    $data['data_jurusan']=array();
+    //$data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
+    $data['data_belum_dibaca']=array();
+
+    //echo var_dump($data['data_siswa']);
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -200,12 +218,12 @@ public function tampil_rekap() {
     $id_kelas=$this->input->GET('id_kelas',TRUE);
     $data['user'] = $this->M_data_users->get_data_user_by_id();
     $data['kelas']=$this->M_data_absensi->get_kelas_sekarang($id_kelas)->result_array();
-    $data['data_siswa']=$this->M_data_absensi->tampilkan_siswa($id_kelas)->result_array();
+    $data['data_siswa']=$this->M_data_absensi->tampilkan_siswa_absen($id_kelas);
     $data['content']='data_absensi/view_absensi_tampil_rekap';
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
     $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    $data['data_tingkatan']=array();
+    $data['data_belum_dibaca']=array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -320,12 +338,13 @@ public function rekapAbsensiSiswa()
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
     $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
     $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    $data['data_tingkatan']=array();
+    $data['data_belum_dibaca']=array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
   public function tampil_rekap_siswa() {
+    $id_sekolah = $this->session->userdata('id_sekolah');
         $data['menu']='data_master';
         $data['mode']='kelas';
         $data['id_kelas']=$this->input->GET('id_kelas',TRUE);
@@ -335,15 +354,16 @@ public function rekapAbsensiSiswa()
         $data['nama_kelas']=$this->M_data_master->get_kelas_sekarangbyid($id_kelas)->row_array();
         $data['data_siswa']=$this->M_data_master->tampilkan_siswa($id_kelas)->result_array();
         $data['content']='data_absensi/view_tampil_rekap';
-        $data['data_kelas']=$this->M_data_master->get_kelas()->result_array();
-        $data['data_jurusan']=$this->M_data_master->get_jurusan()->result_array();
-        $data['data_tingkatan']=$this->M_data_master->get_tingkatan()->result_array();
-        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+        $data['data_kelas']=array();
+        $data['data_jurusan']=array();
+        $data['data_tingkatan']=array();
+        $data['data_belum_dibaca']=array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
     public function detailRekap($nis)
     {
+        $id_sekolah = $this->session->userdata('id_sekolah');
          $data['menu']='data_master';
         $data['mode']='kelas';
         $data['id_kelas']=$this->input->GET('id_kelas',TRUE);
@@ -359,10 +379,10 @@ public function rekapAbsensiSiswa()
         $data['total_izin'] = $this->db->get_where('absensi', ['nis' => $nis, 'keterangan' => "I"])->num_rows();
         $data['total_absen'] = $this->db->get_where('absensi', ['nis' => $nis, 'keterangan' => "A"])->num_rows();
         $data['content']='data_absensi/view_detail_rekap';
-        $data['data_kelas']=$this->M_data_master->get_kelas()->result_array();
-        $data['data_jurusan']=$this->M_data_master->get_jurusan()->result_array();
-        $data['data_tingkatan']=$this->M_data_master->get_tingkatan()->result_array();
-        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+        $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
+        $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
+        $data['data_tingkatan']=array();
+        $data['data_belum_dibaca']=array();
         $this->load->view('admin/partial/index_admin',$data);
 
     }

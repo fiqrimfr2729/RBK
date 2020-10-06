@@ -25,7 +25,6 @@ class Data_master extends CI_Controller
     }
 
     
-
     public function jurusan(){
         $data['menu']='data_master';
         $data['mode']='jurusan';
@@ -338,5 +337,8 @@ class Data_master extends CI_Controller
         }
         redirect('data_master/tampil_kelas?id_kelas='.$siswa->id_kelas);
     }
+
+    
+
 
 }

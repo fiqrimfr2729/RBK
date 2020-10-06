@@ -27,6 +27,7 @@ class Admin extends CI_Controller {
             $id_sekolah = $this->session->userdata('id_sekolah');
             $data['menu']='dashboard';
             $data['content']='dashboard';
+            $data['mode']='dashboard';
             $data['nama_sekolah'] = $this->M_data_master->get_nama_sekolah($id_sekolah);
             $data['total_data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->num_rows();
             $data['total_data_siswa']=$this->M_data_master->get_total_siswa($id_sekolah)->num_rows();
@@ -34,7 +35,7 @@ class Admin extends CI_Controller {
             $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
             
             $data['data_pelanggaran']=10;
-            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan($id_sekolah)->num_rows();
+            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_admin($id_sekolah)->num_rows();
             $data['data_konseling']=0;
             $data['data_belum_dibaca']=array();
 

@@ -64,7 +64,7 @@
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header"><b>Data Alumni</b></h6>
           <a class="collapse-item <?php if($mode == 'data_alumni'){echo 'active';}; ?>" href="<?php echo base_url('Alumni') ?>"><b>Alumni</b></a>
-          <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Kelas') ?>"><b>Universitas</b></a>
+          <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Alumni/Universitas') ?>"><b>Universitas</b></a>
         </div>
       </div>
     </li>
@@ -129,7 +129,7 @@
                 <?php if ($this->session->userdata('level') == "admin") { ?>
                   <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo site_url('Data_absensi/select_class'); ?>"><b>Absen Siswa</b></a><?php } ?>
 
-                  <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo site_url('Data_absensi/lihat_absensi'); ?>"><b>Lihat Absensi</b></a>
+                  <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo site_url('Data_absensi/select_class_absen'); ?>"><b>Lihat Absensi</b></a>
                   <!-- <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Data_absensi/rekapAbsensiSiswa') ?>"><b>Lihat Rekap Absensi</b></a> -->
                   <?php if ($this->session->userdata('level') == "admin") { ?>
                     <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Data_absensi/rekap_absensi') ?>"><b>Rekap Absensi</b></a>

@@ -13,49 +13,25 @@
         <thead align="center">
           <tr>
             <th width="5%">No</th>
-            <th>NISN</th>
-            <th>Nama Lengkap  <?=$this->session->userdata('id_sekolah')?></th>
+            <th>NIS</th>
+            <th>Nama Lengkap  </th>
             <th>Kelas</th>
             <th>Status</th>
             <th width="20%">Aksi</th>
           </tr>
         </thead>
-        <tbody>
-          <?php $no = 1; ?>
-          <?php foreach ($data_bimbingan as $bimbingan) { ?>
-            <?php if ($bimbingan['id_tingkatan'] == $this->session->userdata('id_tingkatan')) { ?>
-
-              <tr>
-                <td align="center"><?php echo $no++; ?></td>
-                <td><?php echo $bimbingan['NIS'] ?></td>
-
-                <?php
-                
-                foreach ($data_siswa as $siswa) {
-                  if ($siswa['NIS']==$bimbingan['NIS']) { ?>
-
-                    <td><?php echo $siswa['nama_lengkap'] ?></td>
-                    <td> 
-                      <?php
-                      foreach ($data_kelas as $kelas) {
-                        if ($siswa['id_kelas']==$kelas['id_kelas']) {
-                          echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas'];
-                        } 
-                      }
-                      ?>
-                    </td>
-
-                  <?php } } ?>
-
-                  <td align="center"><?php if ($bimbingan['status']==0) {
-                    echo "Belum Dibaca";
-                  } elseif($bimbingan['status']==2 && !empty($bimbingan['isi_balasan'])) {echo "Sudah Dibalas";} else { echo "Sudah Dibaca"; } ?></td>
-                  <td align="center">
-                    <a href="<?php echo base_url('Data_bimbingan/baca_bimbingan/'.$bimbingan['id_bimbingan']) ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i> Lihat</a>
-                  </td>
-                </tr>
-              <?php } ?>
-            <?php } ?>
+        <tbody align="center">
+          <?php $no=1; foreach($data_bimbingan as $bimbingan): ?>
+            <tr>
+              <td><?php echo $no++ ?> </td>
+              <td><?php echo $bimbingan['nis'] ?> </td>
+              <td><?php echo $bimbingan['nama_siswa'] ?> </td>
+              <td><?php if($bimbingan['tingkatan'] == '1'){echo 'X';}elseif($bimbingan['tingkatan'] == '2'){echo 'XI';}elseif($bimbingan['tingkatan'] == '3'){echo 'XII';} 
+              echo ' ' . $bimbingan['singkatan_jurusan'] . ' ' . $bimbingan['urutan_kelas'] ?> </td>
+              <td><?php if($bimbingan['status_by_guru']==0){echo "Belum dibaca";}else{echo "Sudah dibaca";} ?> </td>
+              <td> <a href="<?php echo base_url('Data_bimbingan/get_bimbingan/'.$bimbingan['id_bimbingan']) ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i> Lihat</a> </td>
+            </tr>
+          <?php endforeach; ?>
           </tbody>
         </table>
       </div>

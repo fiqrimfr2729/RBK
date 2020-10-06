@@ -1,5 +1,8 @@
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Data Siswa Kelas <?php echo $kelas[0]['tingkatan'] ?> <?php echo $kelas[0]['nama_jurusan'] ?> <?php echo $kelas[0]['urutan_kelas'] ?></h1>
+<h1 class="h3 mb-2 text-gray-800">Data Siswa Kelas  <?php
+                    if($kelas[0]['tingkatan']=='1'){echo "X";}elseif($kelas[0]['tingkatan']=='2'){echo "XI";}elseif($kelas[0]['tingkatan']=='3'){echo "XII";}
+                    echo ' '.$kelas[0]['nama_jurusan']. ' ' . $kelas[0]['urutan_kelas'];
+                    ?></h1>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -13,16 +16,16 @@
       <div class="table-responsive">
 
         <form action="<?php echo base_url('data_absensi/save_absensi') ?>" method="post" name="form_absensi" id="form_absensi" enctype="multipart/form-data">
-        <button type="submit" class="btn bg-gradient-info btn-user "><font color = "white">Tanggal Absensi</font></button>
+        <a class="btn bg-gradient-info btn-user "><font color = "white">Tanggal Absensi <?php echo $tanggal?></font></a>
 
-        <input type="date" name="date" class="form-control " required><br>
+        
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead align="center">
             <tr>
               <th width="5%">No</th>
               <th>NIS</th>
               <th>Nama Siswa</th>
-              <th>Jurusan</th>
+              <th>Kelas</th>
               <th width="35%">Kehadiran</th>
             </tr>
           </thead>
@@ -34,19 +37,16 @@
                 <tr>
 
                   <td align="center"><?php echo $no++; ?></td>
-                  <td><?php echo $siswa['NIS'] ?>
+                  <td><?php echo $siswa['nis'] ?>
                     <input type="hidden" name="id_jurusan[]" value="<?php echo $siswa['id_jurusan'] ?>">
-                    <input type="hidden" name="id_siswa[]" value="<?php echo $siswa['NIS'] ?>">
+                    <input type="hidden" name="id_siswa[]" value="<?php echo $siswa['nis'] ?>">
                   </td>
-                  <td><?php echo $siswa['nama_lengkap'] ?></td>
+                  <td><?php echo $siswa['nama_siswa'] ?></td>
                   <!-- Read kelas siswa -->
                   <td> 
                     <?php
-                    foreach ($data_kelas as $kelas) {
-                      if ($siswa['id_kelas']==$kelas['id_kelas']) {
-                        echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas'];
-                      } 
-                    }
+                    if($siswa['tingkatan']=='1'){echo "X";}elseif($siswa['tingkatan']=='2'){echo "XI";}elseif($siswa['tingkatan']=='3'){echo "XII";}
+                    echo ' '.$siswa['singkatan_jurusan']. ' ' . $siswa['urutan_kelas'];
                     ?>
                   </td>
 
@@ -54,10 +54,10 @@
                     <div class="btn-group">  
                       <select name="keterangan[]" id="Keterangan" class="form-control" required >
                         <option selected disabled>Pilih</option>
-                        <option value="S">Sakit</option>
-                        <option value="A">Absen</option>
-                        <option value="H">Hadir</option>
-                        <option value="I">Izin</option>
+                        <option <?php if($siswa['keterangan']=="S"){echo "selected";} ?> value="S">Sakit</option>
+                        <option <?php if($siswa['keterangan']=="A"){echo "selected";} ?> value="A">Absen</option>
+                        <option <?php if($siswa['keterangan']=="H"){echo "selected";} ?> value="H">Hadir</option>
+                        <option <?php if($siswa['keterangan']=="I"){echo "selected";} ?> value="I">Izin</option>
                       </select>
                     </div>
                             <!-- <a href="<?php echo site_url('Data_absensi/tambah_user_siswa') ?>/<?php echo $siswa['NIS'] ?>" class="btn btn-primary" style="margin-right: 10px"><i class="fa fa-plus"></i></a>
@@ -73,382 +73,10 @@
       
       <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color = "white">simpan</font></button>
 
-           </form>
+      </form>
     </div>
   </div>
 </div>
-
-<!-- Add Siswa Modal-->
-<div class="modal fade" id="tambahSiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLabel">Tambah Data Siswa</h3>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form class="user" action="<?php echo base_url('data_absensi/add_siswa'); ?>" method="post">
-
-          <div class="form-group">       
-            <label>Nama Lengkap</label>
-            <input type="text" name="nama_lengkap" placeholder="masukkan nama lengkap" class="form-control" required="">
-          </div>
-
-          <div class="form-group">
-            <label>NIS</label>
-            <input type="number" name="nis" placeholder="masukkan NIS" class="form-control" required="">
-          </div>
-
-          <div class="form-group">
-            <label>NISN</label>
-            <input type="number" name="nisn" placeholder="masukkan NISN" class="form-control" required="">
-          </div>
-
-          <div class="form-group">
-            <label>Kelas</label>
-            <select name="id_kelas" class="form-control">
-              <option selected="" disabled="">--Pilih Kelas--</option>
-              <?php foreach ($data_kelas as $kelas) { ?>
-                <option value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
-              <?php } ?>
-            </select>
-          </div>
-
-          <div class="form-group">       
-            <label>Jenis Kelamin</label>
-            <div class="radio-inline">
-              <label>
-               <input name="jk" type="radio" required="" value="Laki-Laki"> Laki-laki
-             </label>
-           </div>
-           <div class="radio-inline">
-            <label>
-             <input name="jk" type="radio" required="" value="Perempuan"> Perempuan
-           </label>
-         </div>
-       </div>
-
-       <div class="form-group">
-        <label>Tempat Lahir</label>
-        <input type="text" placeholder="masukkan tempat lahir" name="tempat_lahir" class="form-control" required="">
-      </div>
-
-      <div class="form-group">
-        <label>Tanggal Lahir</label>
-        <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" required="">
-      </div>
-
-      <div class="form-group">
-        <label>Agama</label>
-        <select name="agama" class="form-control" required="">
-          <option selected="" disabled="">--Pilih Agama--</option>
-          <option value="ISLAM">ISLAM</option>
-          <option value="PROTESTAN">KRISTEN</option>
-          <option value="KATOLIK">KATOLIK</option>
-          <option value="HINDU">HINDU</option>
-          <option value="BUDHA">BUDHA</option>
-        </select>
-      </div>
-
-      <div class="form-group">       
-        <label>Alamat</label>
-        <textarea class="form-control" name="alamat" placeholder="masukkan alamat"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>No. Telepon</label>
-        <input type="text" class="form-control" placeholder="nomor telepon" name="no_hp" required="" id="txtPhone"><span id="spnPhoneStatus"></span>
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" name="email" placeholder="email" class="form-control" required="">
-      </div>
-
-      <div class="form-group">       
-        <label>Nama Ayah</label>
-        <input type="text" name="nama_ayah" placeholder="nama ayah" class="form-control" required="">
-      </div>
-
-      <div class="form-group">       
-        <label>Nama Ibu</label>
-        <input type="text" name="nama_ibu" placeholder="nama ibu" class="form-control" required="">
-      </div>
-
-      <div class="form-group">       
-        <label>Pekerjaan Ayah</label>
-        <input type="text" name="pekerjaan_ayah" placeholder="pekerjaan" class="form-control" required="">
-      </div>
-
-      <div class="form-group">       
-        <label>Pekerjaan Ibu</label>
-        <input type="text" name="pekerjaan_ibu" placeholder="pekerjaan" class="form-control" required="">
-      </div>
-
-      <div class="form-group">       
-        <label>Alamat Orangtua</label>
-        <textarea class="form-control" name="alamat_ortu" placeholder="alamat orang tua"></textarea>
-      </div>
-      <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
-      Simpan </font>
-    </button>
-  </form>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Edit Siswa Modal-->
-<?php foreach ($data_siswa as $siswa) { ?>
-  <div class="modal fade" id="editSiswa<?php echo $siswa['NIS'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"><b>EDIT DATA SISWA</b></h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form class="user" action="<?php echo base_url('data_absensi/edit_siswa/'.$siswa['NIS']); ?>" method="post">
-            <div class="form-group">       
-              <label>Nama Lengkap</label>
-              <input type="text" name="nama_lengkap" placeholder="Nama" class="form-control" value="<?php echo $siswa['nama_lengkap'] ?>">
-            </div>
-
-            <div class="form-group">
-              <label>NIS</label>
-              <input type="number" name="nis" placeholder="NIS" class="form-control" value="<?php echo $siswa['NIS'] ?>">
-            </div>
-
-            <div class="form-group">
-              <label>NISN</label>
-              <input type="number" name="nisn" placeholder="NISN" class="form-control" value="<?php echo $siswa['NISN'] ?>">
-            </div>
-
-            <div class="form-group">
-              <label>Kelas</label>
-              <select name="id_kelas" class="form-control">
-                <option selected="" disabled="">--Please select--</option>
-                <?php foreach ($data_kelas as $kelas) { ?>
-                  <option <?php if($kelas['id_kelas']==$siswa['id_kelas']){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
-                <?php } ?>
-              </select>
-            </div>
-
-            <div class="form-group">       
-              <label>Jenis Kelamin</label>
-              <div class="radio-inline">
-                <label>
-                 <input name="jk" type="radio" required="" value="Laki-Laki" <?php if($siswa['jk']=='Laki-Laki'){echo "checked";} ?>>Laki-laki
-               </label>
-             </div>
-             <div class="radio-inline">
-              <label>
-               <input name="jk" type="radio" required="" value="Perempuan" <?php if($siswa['jk']=='Perempuan'){echo "checked";} ?>>Perempuan
-             </label>
-           </div>
-         </div>
-
-         <div class="form-group">
-          <label>Tempat Lahir</label>
-          <input type="text" placeholder="Tempat lahir" name="tempat_lahir" class="form-control" value="<?php echo $siswa['tempat_lahir'] ?>">
-        </div>
-
-        <div class="form-group">
-          <label>Tanggal Lahir</label>
-          <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" value="<?php echo $siswa['tanggal_lahir'] ?>">
-        </div>
-
-        <div class="form-group">
-          <label>Agama</label>
-          <select name="agama" class="form-control" required="">
-            <option selected="" disabled="">--Please select--</option>
-            <option value="ISLAM" <?php if($siswa['agama']=="ISLAM"){echo"selected";} ?>>ISLAM</option>
-            <option value="PROTESTAN" <?php if($siswa['agama']=="PROTESTAN"){echo"selected";} ?>>PROTESTAN</option>
-            <option value="KATOLIK" <?php if($siswa['agama']=="KATOLIK"){echo"selected";} ?>>KATOLIK</option>
-            <option value="HINDU" <?php if($siswa['agama']=="HINDU"){echo"selected";} ?>>HINDU</option>
-            <option value="BUDHA" <?php if($siswa['agama']=="BUDHA"){echo"selected";} ?>>BUDHA</option>
-            <option value="KONGHUCU" <?php if($siswa['agama']=="KONGHUCU"){echo"selected";} ?>>KONGHUCU</option>
-          </select>
-        </div>
-
-        <div class="form-group">       
-          <label>Alamat</label>
-          <textarea class="form-control" name="alamat"><?php echo $siswa['alamat'] ?></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>No. Telep</label>
-          <input type="text" class="form-control" placeholder="No Telepon" name="no_hp" id="txtPhone" value="<?php echo $siswa['no_hp'] ?>"><span id="spnPhoneStatus"></span>
-        </div>
-
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" name="email" placeholder="email" class="form-control" value="<?php echo $siswa['email'] ?>">
-        </div>
-
-        <div class="form-group">       
-          <label>Nama Ayah</label>
-          <input type="text" name="nama_ayah" placeholder="Nama Ayah" class="form-control" value="<?php echo $siswa['nama_ayah'] ?>">
-        </div>
-
-        <div class="form-group">       
-          <label>Nama Ibu</label>
-          <input type="text" name="nama_ibu" placeholder="Nama Ibu" class="form-control" value="<?php echo $siswa['nama_ibu'] ?>">
-        </div>
-
-        <div class="form-group">       
-          <label>Pekerjaan Ayah</label>
-          <input type="text" name="pekerjaan_ayah" placeholder="Pekerjaan" class="form-control" value="<?php echo $siswa['pekerjaan_ayah'] ?>">
-        </div>
-
-        <div class="form-group">       
-          <label>Pekerjaan Ibu</label>
-          <input type="text" name="pekerjaan_ibu" placeholder="Pekerjaan" class="form-control" value="<?php echo $siswa['pekerjaan_ibu'] ?>">
-        </div>
-        <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
-        Save </font>
-      </button>
-    </form>
-  </div>
-</div>
-</div>
-</div>
-<?php } ?>
-
-<!-- Detail Siswa Modal-->
-<?php foreach ($data_siswa as $siswa) { ?>
-  <div class="modal fade" id="detailSiswa<?php echo $siswa['NIS'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"><b>DETAIL SISWA</b></h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">       
-            <label>Nama Lengkap</label>
-            <input type="text" name="nama_lengkap" placeholder="Nama" class="form-control" disabled="" value="<?php echo $siswa['nama_lengkap'] ?>">
-          </div>
-
-          <div class="form-group">
-            <label>NIS</label>
-            <input type="number" name="nis" placeholder="NIS" class="form-control" disabled="" value="<?php echo $siswa['NIS'] ?>">
-          </div>
-
-          <div class="form-group">
-            <label>NISN</label>
-            <input type="number" name="nisn" placeholder="NISN" class="form-control" disabled="" value="<?php echo $siswa['NISN'] ?>">
-          </div>
-
-          <div class="form-group">
-            <label>Kelas</label>
-            <select name="id_kelas" class="form-control" disabled="">
-              <option selected="" disabled="">--Please select--</option>
-              <?php foreach ($data_kelas as $kelas) { ?>
-                <option <?php if($kelas['id_kelas']==$siswa['id_kelas']){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
-              <?php } ?>
-            </select>
-          </div>
-
-          <div class="form-group">       
-            <label>Jenis Kelamin</label>
-            <input type="text" placeholder="Jenis kelamin" name="jk" class="form-control" disabled="" value="<?php echo $siswa['jk'] ?>">
-          </div>
-
-          <div class="form-group">
-            <label>Tempat Lahir</label>
-            <input type="text" placeholder="Tempat lahir" name="tempat_lahir" class="form-control" disabled="" value="<?php echo $siswa['tempat_lahir'] ?>">
-          </div>
-
-          <div class="form-group">
-            <label>Tanggal Lahir</label>
-            <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" disabled="" value="<?php echo $siswa['tanggal_lahir'] ?>">
-          </div>
-
-          <div class="form-group">
-            <label>Agama</label>
-            <select name="agama" class="form-control" disabled="">
-              <option><?php echo $siswa['agama'] ?></option>
-            </select>
-          </div>
-
-          <div class="form-group">       
-            <label>Alamat</label>
-            <textarea class="form-control" name="alamat" disabled=""><?php echo $siswa['alamat'] ?></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>No. Telep</label>
-            <input type="text" class="form-control" placeholder="No Telepon" name="no_hp" disabled="" id="txtPhone" value="<?php echo $siswa['no_hp'] ?>"><span id="spnPhoneStatus"></span>
-          </div>
-
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" placeholder="email" class="form-control" disabled="" value="<?php echo $siswa['email'] ?>">
-          </div>
-
-          <div class="form-group">       
-            <label>Nama Ayah</label>
-            <input type="text" name="nama_ayah" placeholder="Nama Ayah" class="form-control" disabled="" value="<?php echo $siswa['nama_ayah'] ?>">
-          </div>
-
-          <div class="form-group">       
-            <label>Nama Ibu</label>
-            <input type="text" name="nama_ibu" placeholder="Nama Ibu" class="form-control" disabled="" value="<?php echo $siswa['nama_ibu'] ?>">
-          </div>
-
-          <div class="form-group">       
-            <label>Pekerjaan Ayah</label>
-            <input type="text" name="pekerjaan_ayah" placeholder="Pekerjaan" class="form-control" disabled="" value="<?php echo $siswa['pekerjaan_ayah'] ?>">
-          </div>
-
-          <div class="form-group">       
-            <label>Pekerjaan Ibu</label>
-            <input type="text" name="pekerjaan_ibu" placeholder="Pekerjaan" class="form-control" disabled="" value="<?php echo $siswa['pekerjaan_ibu'] ?>">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<!-- Delete Siswa Modal-->
-<?php foreach ($data_siswa as $siswa) { ?>
-  <div class="modal fade" id="hapusSiswa<?php echo $siswa['NIS'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin ingin menghapus data ini?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Pilih ya jika anda yakin</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-          <a class="btn btn-primary" href="<?php echo base_url('data_absensi/delete_siswa/'.$siswa['NIS']) ?>">Ya!</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php } ?>
-
-
-
-
-
-
-
-
-
-
-
 
 
 

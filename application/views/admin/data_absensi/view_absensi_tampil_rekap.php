@@ -19,40 +19,35 @@
               <!--  <th></th> -->
               <th>Tanggal</th>
               <th>File Rekap</th>
-              <!-- <th>Status</th> -->
-              <!-- <th width="30%">Aksi</th> -->
+              <th>Status</th> 
+              <th width="30%">Aksi</th>
             </tr>
           </thead>
-          <tbody>
-
-            <?php $no = 1; ?>
-            <?php
-            if (sizeof($data_siswa)>0) {
-              foreach ($data_siswa as $siswa) { ?>
-                <tr>
-                  <td align="center"><?php echo $no++; ?></td>
-                  <td><?php echo $siswa['NIS'] ?></td>
-                  <td><?php echo $siswa['nama_lengkap'] ?></td>
-                  <!-- Read kelas siswa -->
-                  <td> 
-                    <?php
-                    foreach ($data_kelas as $kelas) {
-                      if ($siswa['id_kelas']==$kelas['id_kelas']) {
-                        echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas'];
-                      } 
-                    }
+          <tbody> <?php $no = 1; ?>
+            <?php foreach ($data_siswa as $siswa) { ?>
+              <tr>
+                <td align="center"><?php echo $no++; ?></td>
+                <td><?php echo $siswa['nis'] ?></td>
+                <td><?php echo $siswa['nama_siswa'] ?></td>
+                <!-- Read kelas siswa -->
+                <td> 
+                  <?php
+                  foreach ($data_kelas as $kelas) {
+                    if ($siswa['id_kelas']==$kelas['id_kelas']) {
+                      echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas'];
+                    } 
+                  }
                     ?>
                   </td>
 
                   <td align="center">
-                    <a href="<?php echo site_url('Data_master/tambah_user_siswa') ?>/<?php echo $siswa['NIS'] ?>" class="btn btn-primary" style="margin-right: 10px"><i class="fa fa-plus"></i></a>
-                    <a href="javascript:;" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['NIS'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-search"></i></a>
-                    <a href="javascript:;" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['NIS'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
-                    <a href="javascript:;" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['NIS'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                    <td>
+                    
+                    <a href="javascript:;" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-search"></i></a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['nis'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['nis'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                  </td>
                     </tr>
-                  <?php }
-                } ?>
+                  <?php }?>
               </tbody>
             </table>
           </div>
@@ -72,7 +67,7 @@
             <div class="modal-body">
               <!-- <form class="user" action="<?php echo base_url('data_absensi/add_rekap'); ?>" method="post"> -->
                 <?php echo form_open_multipart (base_url('data_absensi/add_rekap'));?>
-                <input type="hidden" name="id_kelas" value="<?php echo $kelas[0]['id_kelas']?>">
+                <input type="hidden" name="id_kelas" value="<?php echo $kelas['id_kelas']?>">
                 <input type="file" class="form-control form-control" name="rekap" placeholder="Tempat Kejadian Pelanggaran" autocomplete="off" required="">
 
                 <div class="form-group"> </br>

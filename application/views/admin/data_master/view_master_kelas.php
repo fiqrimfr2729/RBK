@@ -6,8 +6,9 @@
   <div class="card-header py-3">
     <h6 class="float-left text-primary font-weight-bold" style="margin-top: 10px">Data  Kelas</h6>
     <?php if ($this->session->userdata('level') == "admin") { ?>
-    <a href="javascript:;" class="btn btn-info float-right" data-toggle="modal" data-target="#tambahKelas">Tambah Kelas</a>
-    <a href="javascript:;" style="margin-right: 10px" class="btn btn-success float-right" data-toggle="modal" data-target="#updateTingkat">Perbarui Tingkatan</a><?php } ?>
+    <a href="javascript:;" class="btn btn-danger float-right" data-toggle="modal" data-target="#turunTingkat">Turunkan Tingkatan</a>
+    <a href="javascript:;" style="margin-right: 10px" class="btn btn-success float-right" data-toggle="modal" data-target="#updateTingkat">Naikan Tingkatan</a>
+    <a href="javascript:;" style="margin-right: 10px" class="btn btn-info float-right" data-toggle="modal" data-target="#tambahKelas">Tambah Kelas</a><?php } ?>
   </div>
   <div class="card-body">
     <div class="table-responsive">
@@ -34,6 +35,7 @@
                   <?php if ($this->session->userdata('level') == "admin") { ?>
               <td align="center">
                 <a href="javascript:;" data-toggle="modal" data-target="#editKelas<?php echo $kelas['id_kelas'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i> Ubah</a>
+                <a href="javascript:;" data-toggle="modal" data-target="#hapusKelas<?php echo $kelas['id_kelas'] ?>" class="btn btn-danger" style="margin-right: 10px"><i class="fas fa-trash"></i> Hapus</a>
               </td>
               <?php } ?>
             </tr>
@@ -58,7 +60,7 @@
         <form class="user" action="<?php echo base_url('Kelas/add_kelas'); ?>" method="post">
           <div class="form-group">
             <label>Tingkatan Kelas</label>
-            <select name="tingkatan" class="form-control">
+            <select name="tingkatan" class="form-control" required>
               <option selected="" disabled="">-- Silahkan Pilih --</option>
               <option value="1">X - Sepuluh</option>
               <option value="2">XI - Sebelas</option>
@@ -67,7 +69,7 @@
           </div>
           <div class="form-group">
             <label>Jurusan</label>
-            <select name="jurusan" class="form-control">
+            <select name="jurusan" class="form-control" required>
               <option selected="" disabled="">-- Silahkan Pilih --</option>
               <?php foreach ($data_jurusan as $jurusan) { ?>
                 <option value="<?php echo $jurusan['id_jurusan'] ?>"><?php echo $jurusan['nama_jurusan'] ?></option>
@@ -96,16 +98,37 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLabel">Perbarui Tingkatan</h3>
+        <h3 class="modal-title" id="exampleModalLabel">Naikan Tingkatan</h3>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body">
         <form class="user" action="<?php echo base_url('kelas/naik_kelas'); ?>" method="post">
-          Memperbarui tingkatan kelas akan mengubah semua tingkatan kelas 1 tingkat lebih tinggi
+          Menaikan tingkatan kelas akan mengubah semua tingkatan kelas 1 tingkat lebih tinggi
           <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
-            Perbarui </font>
+            Naikan </font>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="turunTingkat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Turunkan Tingkatan</h3>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="user" action="<?php echo base_url('kelas/turun_kelas'); ?>" method="post">
+          Menurunkan tingkatan kelas akan mengubah semua tingkatan kelas 1 tingkat lebih rendah
+          <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
+            Turunkan </font>
           </button>
         </form>
       </div>
@@ -172,15 +195,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete this data?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Apa anda yakin menghapus data ini?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Click yes if you sure</div>
+        <div class="modal-body">Klik Ya jika anda yakin</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="<?php echo base_url('data_master/delete_kelas/'.$kelas['id_kelas']) ?>">Yes!</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <a class="btn btn-primary" href="<?php echo base_url('Kelas/delete_kelas/'.$kelas['id_kelas']) ?>">Ya</a>
         </div>
       </div>
     </div>

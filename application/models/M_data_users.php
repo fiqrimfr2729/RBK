@@ -24,15 +24,21 @@ class M_data_users extends CI_Model {
 		$this->db->insert('users',$data);
 	}
 
-	public function getAllPengumumanById($id_pengumuman)
+	public function get_pengumuman_by_id($id_pengumuman)
 	{
-		return $this->db->get_where('pengumuman', ['id_pengumuman' => $id_pengumuman])->row_array();
+		$pengumuman = $this->db->get_where('pengumuman', ['id_pengumuman' => $id_pengumuman])->row();
+		$pengumuman->jumlah_komentar = $this->db->from('komentar')->where('id_pengumuman', $id_pengumuman)->get()->num_rows();
+		return $pengumuman;
 	}
 
-	public function getAllPengumuman()
+	public function getAllPengumuman($id_sekolah)
 	{
-		$id_sekolah = $this->session->userdata('id_sekolah');
-		return $this->db->get_where('pengumuman', ['id_sekolah' => $id_sekolah])->result_array();
+		$pengumuman = $this->db->get_where('pengumuman', ['id_sekolah' => $id_sekolah])->result();
+
+		foreach($pengumuman as $data){
+			$data->jumlah_komentar = $this->db->from('komentar')->where('id_pengumuman', $data->id_pengumuman)->get()->num_rows();
+		}
+		return $pengumuman;
 	}
 
 	public function getAllKomentar()
@@ -40,6 +46,13 @@ class M_data_users extends CI_Model {
 		$this->db->join('users', 'users.id_user = komentar.id_user');
 		$this->db->join('pengumuman', 'pengumuman.id_pengumuman = komentar.id_pengumuman');
 		return $this->db->get('komentar')->result();
+	}
+
+	public function get_komentar($id_pengumuman){
+		$this->db->from('komentar')->select('komentar.id_komentar, komentar.tanggal, komentar.isi_komentar, guru.nama_guru, siswa.nama_siswa');
+		$this->db->join('guru', 'guru.id_user=komentar.id_user', 'left');
+		$this->db->join('siswa', 'siswa.id_user=komentar.id_user', 'left');
+		return $this->db->where('komentar.id_pengumuman', $id_pengumuman)->get()->result();
 	}
 
 	public function edit_user($id_users, $data){

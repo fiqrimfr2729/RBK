@@ -1,5 +1,5 @@
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Data Siswa Kelas <?php echo $kelas[0]['tingkatan'] ?> <?php echo $kelas[0]['nama_jurusan'] ?> <?php echo $kelas[0]['urutan_kelas'] ?></h1>
+<h1 class="h3 mb-2 text-gray-800">Data Siswa Kelas <?php if($kelas[0]['tingkatan']=='1'){echo 'X';}elseif($kelas[0]['tingkatan']=='2'){echo 'XI';}else{echo 'XII';} ?> <?php echo $kelas[0]['nama_jurusan'] ?> <?php echo $kelas[0]['urutan_kelas'] ?></h1>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -7,7 +7,6 @@
       <h6 class="float-left text-primary font-weight-bold" style="margin-top: 10px">Data Siswa</h6>
        <?php if ($this->session->userdata('level') == "admin") { ?>
       <a href="javascript:;" class="btn btn-success float-right" data-toggle="modal" data-target="#tambahSiswa"> <i class="fas fa-plus"></i> Tambah Siswa</a>&ensp;<?php } ?>
-      <a target="_blank" style="margin-right: 10px" href="<?php echo site_url('Data_master/cetak_kelas'); ?>/<?php echo $kelas[0]['id_kelas'] ?>" class="btn btn-danger float-right"><i class="fas fa-print"></i> Cetak</a>
   </div>
 
   <div class="card-body">
@@ -19,9 +18,8 @@
             <th>NIS</th>
             <th>NISN</th>
             <th>Nama Siswa</th>
-             <?php if ($this->session->userdata('level') == "admin") { ?>
-              <th width="30%">Aksi</th>
-            <?php } ?>
+             
+             <th width="30%">Aksi</th>
             
           </tr>
         </thead>
@@ -32,13 +30,17 @@
               <td align="center"> <?php echo $siswa['nis'] ?> </td>
               <td align="center"> <?php echo $siswa['nisn'] ?> </td>
               <td align="center"> <?php echo $siswa['nama_siswa'] ?> </td>
-              <?php if ($this->session->userdata('level') == "admin") : ?>
               <td align="center"> 
+              <?php if ($this->session->userdata('level') == "admin") : ?>
                 <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
                 <a href="javascript:;" title="edit" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['nis'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
                 <a href="javascript:;" title="hapus" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['nis'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-              </td>
+              <?php else: ?>
+                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis']; ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i>  Detail</a>
+
+                <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$siswa['nis'] ?>" title="detail" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i>  Bimbingan </a>
               <?php endif; ?>
+              </td>
             </tr>
 
           <?php endforeach; ?>
@@ -128,19 +130,6 @@
         <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" value="<?php echo $siswa['tanggal_lahir'] ?>">
       </div>
 
-      <div class="form-group">
-        <label>Agama</label>
-        <select name="agama" class="form-control" required="">
-          <option selected="" disabled="">--Please select--</option>
-          <option value="ISLAM" <?php if($siswa['agama']=="islam"){echo"selected";} ?>>ISLAM</option>
-          <option value="PROTESTAN" <?php if($siswa['agama']=="kristen"){echo"selected";} ?>>PROTESTAN</option>
-          <option value="KATOLIK" <?php if($siswa['agama']=="katolik"){echo"selected";} ?>>KATOLIK</option>
-          <option value="HINDU" <?php if($siswa['agama']=="hindu"){echo"selected";} ?>>HINDU</option>
-          <option value="BUDHA" <?php if($siswa['agama']=="budha"){echo"selected";} ?>>BUDHA</option>
-          <option value="KONGHUCU" <?php if($siswa['agama']=="konghucu"){echo"selected";} ?>>KONGHUCU</option>
-        </select>
-      </div>
-
       <div class="form-group">       
         <label>Alamat</label>
         <textarea class="form-control" name="alamat"><?php echo $siswa['alamat'] ?></textarea>
@@ -193,22 +182,17 @@
 
         <div class="form-group">
           <label>NIS</label>
-          <input type="number" name="nis" placeholder="NIS" class="form-control" disabled="" value="<?php echo $siswa['nis'] ?>">
+          <input type="text" name="nis" placeholder="NIS" class="form-control" disabled="" value="<?php echo $siswa['nis'] ?>">
         </div>
 
         <div class="form-group">
           <label>NISN</label>
-          <input type="number" name="nisn" placeholder="NISN" class="form-control" disabled="" value="<?php echo $siswa['nisn'] ?>">
+          <input type="text" name="nisn" placeholder="NISN" class="form-control" disabled="" value="<?php echo $siswa['nisn'] ?>">
         </div>
 
         <div class="form-group">
           <label>Kelas</label>
-          <select name="id_kelas" class="form-control" disabled="">
-            <option selected="" disabled="">--Please select--</option>
-            <?php foreach ($data_kelas as $kelas) { ?>
-            <option <?php if($kelas['id_kelas']==$siswa['id_kelas']){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
-            <?php } ?>
-          </select>
+          <input type="text" name="kelas" placeholder="kelas" class="form-control" disabled="" value="<?php if($kelas['tingkatan']=='1'){echo 'X';}elseif($kelas['tingkatan']=='2'){echo 'XI';}else{echo 'XII';} echo ' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?>">
         </div>
 
         <div class="form-group">       
@@ -226,12 +210,6 @@
           <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" disabled="" value="<?php echo $siswa['tanggal_lahir'] ?>">
         </div>
 
-        <div class="form-group">
-          <label>Agama</label>
-          <select name="agama" class="form-control" disabled="">
-            <option><?php echo $siswa['agama'] ?></option>
-          </select>
-        </div>
 
         <div class="form-group">       
           <label>Alamat</label>

@@ -27,8 +27,8 @@
             <tr>
               <td align="center"><?php echo $no++; ?></td>
               <td align="center"><?php echo $absensi['tanggal']?></td>
-              <td align="center"><?php echo $absensi['nama_lengkap'] ?></td>
-              <td align="center"><?php echo $absensi['NIS'] ?></td>
+              <td align="center"><?php echo $absensi['nama_siswa'] ?></td>
+              <td align="center"><?php echo $absensi['nis'] ?></td>
               <td align="center"><?php echo $absensi['id_jurusan'] ?></td>
               <td align="center"><?php echo $absensi['Keterangan'] ?></td>
               <!-- Read kelas siswa -->
@@ -45,7 +45,7 @@
       </tbody>
        <tfoot>
           <tr>
-            <th>No</th>
+            <th width="5%">No</th>
             <th>Hari, Tanggal</th>
             <th>Nama Siswa</th>
             <th>NIS</th>

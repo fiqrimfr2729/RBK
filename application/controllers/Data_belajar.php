@@ -24,13 +24,14 @@ class Data_belajar extends CI_Controller
         } else {
             $data['menu']='data_belajar';
             $data['content']='data_belajar/view_belajar_siswa';
+            $data['mode']='pengumuman';
             $data['data_informasi']=$this->M_data_belajar->get_belajar();
             $data['user'] = $this->M_data_users->get_data_user_by_id();
             // $data['data_belajar']=$this->M_data_belajar->get_belajar()->result_array();
-            $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
-            $data['data_pelanggaran']=$this->M_data_pelanggaran->get_pelanggaran()->result_array();
-            $data['data_kelas']=$this->M_data_master->get_kelas()->result_array();
-            $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+            $data['data_siswa']=array();
+            $data['data_pelanggaran']=array();
+            $data['data_kelas']=array();
+            $data['data_belum_dibaca']=array();
             $this->load->view('admin/partial/index_admin',$data);
         }
     }
@@ -72,9 +73,12 @@ class Data_belajar extends CI_Controller
     }
 
     public function do_upload() {
+        $date = new DateTime();
+        $file = $date->getTimestamp();
         // setting konfigurasi upload
         $config['upload_path'] = './assets/admin/pengumuman';
-        $config['allowed_types'] = 'gif|jpg|png|docx|pdf|png';
+        $config['allowed_types'] = 'gif|jpg|jpeg|docx|pdf|png';
+        $config['file_name'] = $file;
         // load library upload
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('informasi')) {
@@ -84,21 +88,16 @@ class Data_belajar extends CI_Controller
         } else {
             $result = $this->upload->data();
             $result1 =$result['file_name'];
-
+    
             $informasi = $this->input->post('view_belajar');
-            $numdays = $date_array["wday"];
-            $date = date("Y-m-d", time() - ($numdays * 24*60*60));
-
+            
             $data = array(
                           //Disimpan nama file Gambar
-                'id_user'          => $this->session->userdata('id_user'),
-                'tgl_buat'         => $date,
-                'foto'             => $result1,
+                'nik'          => $this->session->userdata('nik'),
+                'tgl_buat'         => date("Y-m-d H:i:s"),
                 'isi_pengumuman'   => $informasi,
-                'created_at'       => $date,
-                'update_at'       => NULL,
                 'id_sekolah'       => $this->session->userdata('id_sekolah'),
-
+                'foto'             => $result1
 
             );
             

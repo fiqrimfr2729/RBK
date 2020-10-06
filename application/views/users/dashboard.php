@@ -101,8 +101,8 @@
                             <tr>
                                 <td>1.</td>
                                 <td><?php echo $bimbingan['subjek'] ?></td>
-                                <td><?php echo $bimbingan['isi_bimbingan'] ?></td>
-                                <td><?php echo $bimbingan['tanggal'] ?></td>
+                                <td><?php echo $bimbingan['isi_bim'] ?></td>
+                                <td><?php echo $bimbingan['tgl_bim'] ?></td>
                                 <td><?php if($bimbingan['dibaca']==0 || $bimbingan['status']==1){echo"belum dibalas";}else{echo "sudah dibalas";} ?></td>
                                 <td align="center">
                                     <a href="javascript:;" data-toggle="modal" data-target="#balasanBimbingan<?php echo $bimbingan['id_bimbingan'] ?>" class="btn btn-info">Lihat Balasan</a>

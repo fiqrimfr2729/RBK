@@ -24,27 +24,22 @@
         <tbody>
           <?php $no = 1; ?>
           <?php
-          if (sizeof($data_siswa)>0) {
+          
           foreach ($data_siswa as $siswa) { ?>
           <tr>
             <td align="center"><?php echo $no++; ?></td>
-            <td><?php echo $siswa['NIS'] ?></td>
-            <td><?php echo $siswa['nama_lengkap'] ?></td>
+            <td align="center"><?php echo $siswa['nis'] ?></td>
+            <td align="center"><?php echo $siswa['nama_siswa'] ?></td>
             <!-- Read kelas siswa -->
             <td> 
-              <?php
-              foreach ($data_kelas as $kelas) {
-                if ($siswa['id_kelas']==$kelas['id_kelas']) {
-                  echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas'];
-                } 
-              }
-              ?>
+              <?php if($siswa['tingkatan']=='1'){echo "X";}elseif($siswa['tingkatan']=='2'){echo "XI";}elseif($siswa['tingkatan']=='3'){echo "XII";}echo ' '.$siswa['nama_jurusan'].' '.$siswa['urutan_kelas'];?>
             </td>
             <td align="center">
-              <a href="<?php echo site_url('Data_absensi/detailRekap') ?>/<?php echo $siswa['NIS'] ?>" class="btn btn-primary" style="margin-right: 10px"><i class="fas fa-search"></i>View Rekap</a>
+              <a href="<?php echo site_url('Data_absensi/detailRekap') ?>/<?php echo $siswa['nis'] ?>" class="btn btn-primary" style="margin-right: 10px"><i class="fas fa-search"></i>View Rekap</a>
             <td>
           </tr>
-          <?php }
+
+          <?php 
           } ?>
         </tbody>
       </table>

@@ -30,9 +30,9 @@
                             <tr>
                                 <td><?php echo $no++; ?></td>
                                 <td><?php echo $bimbingan['subjek'] ?></td>
-                                <td><?php echo $bimbingan['isi_bimbingan'] ?></td>
-                                <td><?php echo $bimbingan['tanggal_bimbingan'] ?></td>
-                                <td><?php if($bimbingan['status']==0){echo"belum dibalas";}else{echo "sudah dibalas";} ?></td>
+                                <td><?php echo $bimbingan['isi_bim'] ?></td>
+                                <td><?php echo $bimbingan['tgl_bim'] ?></td>
+                                <td><?php if($bimbingan['status_by_guru']==0){echo"belum dibalas";}else{echo "sudah dibalas";} ?></td>
                                 <td align="center">
                                     <a href="javascript:;" data-toggle="modal" data-target="#balasanBimbingan<?php echo $bimbingan['id_bimbingan'] ?>" class="btn btn-info">Lihat Balasan</a>
                                 </td>

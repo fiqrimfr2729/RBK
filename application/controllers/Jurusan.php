@@ -31,21 +31,40 @@ class Jurusan extends CI_Controller
     }
 
     public function add_jurusan(){
-        $data = array(
-            'nama_jurusan' => $this->input->post('jurusan'),
-            'singkatan_jurusan' => $this->input->post('singkatan'),
-            'id_sekolah' => $this->session->userdata('id_sekolah')
-            );
 
-        if ($this->M_data_master->add_jurusan($data)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
+        $this->form_validation->set_rules('jurusan', 'jurusan', 'required|alpha_numeric_spaces|is_unique[jurusan.nama_jurusan]',
+        array(
+            'is_unique' => 'Data jurusan sudah ada',
+            'alpha_numeric_spaces' => 'Nama jurusan tidak boleh mengandung karakter'));
+        $this->form_validation->set_rules('singkatan', 'singkatan', 'required|alpha_numeric_spaces|is_unique[jurusan.singkatan_jurusan]',
+        array(
+            'is_unique' => 'Data singkatan jurusan sudah ada',
+            'alpha_numeric_spaces' => 'Singkatan jurusan tidak boleh mengandung karakter'));
+
+        if($this->form_validation->run() != false){
+            $data = array(
+                'nama_jurusan' => $this->input->post('jurusan'),
+                'singkatan_jurusan' => $this->input->post('singkatan'),
+                'id_sekolah' => $this->session->userdata('id_sekolah')
+                );
+    
+            if ($this->M_data_master->add_jurusan($data)) {
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+              </button></div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+              </button></div>");
+            }
+        }else{
+            $message = str_replace ("\r\n", "<br>", validation_errors() );
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>$message<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+              </button></div>");
         }
+
+        
         redirect('/jurusan');
     }
 
@@ -55,28 +74,70 @@ class Jurusan extends CI_Controller
               <span aria-hidden='true'>&times;</span>
           </button></div>");
         } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal dihapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Terdapat data kelas pada jurusan yang akan dihapus<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
               <span aria-hidden='true'>&times;</span>
           </button></div>");
         }
+
+        //echo var_dump($this->M_data_master->delete_jurusan($id_jurusan));
         redirect('/jurusan');
     }
 
     public function edit_jurusan($id_jurusan){
-        $data = array(
-            'nama_jurusan' => $this->input->post('jurusan'),
-            'singkatan_jurusan' => $this->input->post('singkatan')
-            );
 
-        if ($this->M_data_master->edit_jurusan($id_jurusan, $data)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
+        $nama_jurusan = $this->input->post('jurusan');
+        $singkatan = $this->input->post('singkatan');
+        
+        $jurusan= $this->M_data_master->get_jurusan_by_id($id_jurusan);
+
+        if($jurusan->nama_jurusan == $nama_jurusan && $jurusan->singkatan_jurusan == $singkatan ){
+            redirect('/jurusan');
+        }elseif($jurusan->nama_jurusan == $nama_jurusan){
+            $this->form_validation->set_rules('singkatan', 'singkatan', 'required|alpha_numeric_spaces|is_unique[jurusan.singkatan_jurusan]',
+            array(
+            'is_unique' => 'Data singkatan jurusan sudah ada',
+            'alpha_numeric_spaces' => 'Singkatan jurusan tidak boleh mengandung karakter'));
+
+        }elseif($jurusan->singkatan_jurusan == $singkatan){
+            $this->form_validation->set_rules('jurusan', 'jurusan', 'required|alpha_numeric_spaces|is_unique[jurusan.nama_jurusan]',
+            array(
+            'is_unique' => 'Data jurusan sudah ada',
+            'alpha_numeric_spaces' => 'Nama jurusan tidak boleh mengandung karakter'));
+        }else{
+            $this->form_validation->set_rules('singkatan', 'singkatan', 'required|alpha_numeric_spaces|is_unique[jurusan.singkatan_jurusan]',
+            array(
+            'is_unique' => 'Data singkatan jurusan sudah ada',
+            'alpha_numeric_spaces' => 'Singkatan jurusan tidak boleh mengandung karakter'));
+
+            $this->form_validation->set_rules('jurusan', 'jurusan', 'required|alpha_numeric_spaces|is_unique[jurusan.nama_jurusan]',
+            array(
+            'is_unique' => 'Data jurusan sudah ada',
+            'alpha_numeric_spaces' => 'Nama jurusan tidak boleh mengandung karakter'));
         }
+
+        if($this->form_validation->run() != false){
+            $data = array(
+                'nama_jurusan' => $this->input->post('jurusan'),
+                'singkatan_jurusan' => $this->input->post('singkatan')
+                );
+
+            if ($this->M_data_master->edit_jurusan($id_jurusan, $data)) {
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            }
+            
+        }else{
+            $message = str_replace ("\r\n", "<br>", validation_errors() );
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>$message<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+              </button></div>");
+        }
+
         redirect('/jurusan');
     }
 }

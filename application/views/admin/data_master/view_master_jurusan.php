@@ -27,8 +27,8 @@
           <?php foreach ($data_jurusan as $jurusan) { ?>
             <tr>
               <td align="center"><?php echo $no++; ?></td>
-              <td><?php echo $jurusan['nama_jurusan'] ?></td>
-              <td><?php echo $jurusan['singkatan_jurusan'] ?></td>
+              <td align="center"><?php echo $jurusan['nama_jurusan'] ?></td>
+              <td align="center"><?php echo $jurusan['singkatan_jurusan'] ?></td>
                <?php if ($this->session->userdata('level') == "admin") { ?>
               <td align="center">
                 <a href="" data-toggle="modal" data-target="#editJurusan<?php echo $jurusan['id_jurusan'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>

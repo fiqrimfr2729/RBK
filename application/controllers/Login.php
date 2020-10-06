@@ -6,12 +6,10 @@ class Login extends CI_Controller {
     parent::__Construct();
 
     if($this->session->userdata('logged_in')){
-      if ($this->session->userdata('level')=='admin') {
+      if ($this->session->userdata('level')=='admin' || $this->session->userdata('level')=='guru') {
         redirect('admin/dashboard');
       } elseif($this->session->userdata('level')=='siswa') {
-        redirect('users/dashboard');
-      } else {
-        redirect('ortu/dashboard');
+        redirect('Siswa');
       }
     }else{    
       $this->load->model('M_login');
@@ -20,7 +18,7 @@ class Login extends CI_Controller {
       $this->load->model('M_data_users');
       $this->load->library('session');
       $this->load->helper('url');
-      $this->load->helper('captcha'); 
+     
     }
     
   }
@@ -52,13 +50,13 @@ class Login extends CI_Controller {
       }elseif($user['level']=='guru'){
         $data_session = array(
           'logged_in' => true,
-          'username' => $username,
+          'nik' => $username,
           'status' => "login",
           'id_sekolah' => $user['id_sekolah'],
           'level' => 'guru'
         );
         $this->session->set_userdata($data_session);
-        redirect(base_url("/Admin/dashboard"));
+        redirect(base_url("/Guru/dashboard"));
       }elseif($user['level']=='siswa'){
         $data_session = array(
           'logged_in' => true,
@@ -68,8 +66,16 @@ class Login extends CI_Controller {
           'level' => 'siswa'
         );
         $this->session->set_userdata($data_session);
-        redirect(base_url("/Users/dashboard"));
+        redirect(base_url("/Siswa/dashboard"));
+      }else{
+        
       }
+    }else{
+      $message = $user['message'];
+      $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>$message<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>&times;</span>
+        </button></div>");
+        redirect(base_url());
     }
 
 
