@@ -26,6 +26,7 @@ class M_data_master extends CI_Model {
 		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
 		$this->db->where('tingkatan', '1')->or_where('tingkatan', '2')->or_where('tingkatan', '3');
 		$this->db->order_by('jurusan.nama_jurusan','ASC');
+		$this->db->order_by('kelas.tingkatan','ASC');
 		$this->db->order_by('kelas.urutan_kelas','ASC');
 		$sql_kelas=$this->db->get_where('kelas', ['jurusan.id_sekolah' => $sekolah]);
 		return $sql_kelas->result();
@@ -97,8 +98,10 @@ class M_data_master extends CI_Model {
 
 	public function get_kelas($id_sekolah){
 		$this->db->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan');
-		$this->db->order_by('kelas.urutan_kelas','ASC');
 		$this->db->where('tingkatan', '1')->or_where('tingkatan', '2')->or_where('tingkatan', '3');
+		$this->db->order_by('kelas.tingkatan','ASC');
+		$this->db->order_by('kelas.urutan_kelas','ASC');
+		$this->db->order_by('jurusan.nama_jurusan','ASC');
 		return $this->db->get_where('kelas', ['jurusan.id_sekolah' => $id_sekolah]);
 	}
 
@@ -210,6 +213,11 @@ class M_data_master extends CI_Model {
 
 	public function get_guru($nik){
         $guru = $this->db->from('guru')->where('nik', $nik)->get()->row();
+        return $guru;
+	}
+	
+	public function get_guru_bk_by_tingkatan($tingkatan, $id_sekolah){
+        $guru = $this->db->from('guru')->where('tingkatan', $tingkatan)->where('id_sekolah', $id_sekolah)->get()->row();
         return $guru;
     }
 

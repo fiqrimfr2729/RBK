@@ -11,7 +11,7 @@ class M_data_bimbingan extends CI_Model {
         ->join('kelas', 'siswa.id_kelas = kelas.id_kelas')
         ->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan')
 		->where('jurusan.id_sekolah', $id_sekolah)
-		->where('bimbingan.tingkatan', $guru->tingkatan)
+		->where('bimbingan.id_tingkatan', $guru->tingkatan)
 		->where('kelas.tingkatan', $guru->tingkatan);
         return $this->db->get();
 	}
@@ -27,7 +27,7 @@ class M_data_bimbingan extends CI_Model {
 
 	public function get_bimbingan_siswa($nis){
 		$this->db->from('bimbingan')
-		->select('bimbingan.tingkatan, bimbingan.nis, bimbingan.subjek, bimbingan.tgl_bim, bimbingan.isi_bim, bimbingan.status_by_guru, bimbingan.id_bimbingan')
+		->select('bimbingan.id_tingkatan, bimbingan.nis, bimbingan.subject, bimbingan.tgl_bim, bimbingan.isi_bim, bimbingan.status_by_guru, bimbingan.id_bimbingan')
         ->join('siswa', 'siswa.nis = bimbingan.nis')
         ->join('kelas', 'siswa.id_kelas = kelas.id_kelas')
         ->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan')
@@ -53,8 +53,12 @@ class M_data_bimbingan extends CI_Model {
 	}
 
 	public function get_bimbingan_where_id($id_bimbingan){
-		$this->db->from('bimbingan');
+		$this->db->from('bimbingan')->select('bimbingan.id_bimbingan, siswa.nis, siswa.nama_siswa, 
+		jurusan.nama_jurusan, bimbingan.id_tingkatan, jurusan.singkatan_jurusan, kelas.urutan_kelas, bimbingan.tgl_bim,
+		bimbingan.subject, bimbingan.isi_bim');
 		$this->db->join('siswa', 'siswa.nis = bimbingan.nis');
+		$this->db->join('kelas', 'kelas.id_kelas=siswa.id_kelas');
+		$this->db->join('jurusan', 'jurusan.id_jurusan=kelas.id_jurusan');
 		$this->db->where('id_bimbingan', $id_bimbingan);
 		return $this->db->get();
 	}

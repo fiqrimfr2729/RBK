@@ -24,11 +24,11 @@
           <?php $no=1; foreach($data_bimbingan as $bimbingan): ?>
             <tr>
               <td align="center"><?php echo $no++ ?> </td>
-              <td align="center"><?php echo $bimbingan['subjek'] ?> </td>
+              <td align="center"><?php echo $bimbingan['subject'] ?> </td>
               <td align="center"><?php echo $bimbingan['tgl_bim'] ?> </td>
               <td align="center"><?php echo $bimbingan['isi_bim'] ?> </td>
-              <td align="center"> <?php if($bimbingan['tingkatan'] == '1'){echo 'X';}elseif($bimbingan['tingkatan'] == '2'){echo 'XI';}elseif($bimbingan['tingkatan'] == '3'){echo 'XII';} ?> </td>
-              <td align="center"> <a href="<?php echo base_url('Data_bimbingan/get_bimbingan/'.$bimbingan['id_bimbingan']) ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i> Lihat</a> </td>
+              <td align="center"> <?php if($bimbingan['id_tingkatan'] == '1'){echo 'X';}elseif($bimbingan['id_tingkatan'] == '2'){echo 'XI';}elseif($bimbingan['id_tingkatan'] == '3'){echo 'XII';} ?> </td>
+              <td align="center"> <a href="<?php echo base_url('Data_bimbingan/rekap_bimbingan/'.$bimbingan['id_bimbingan']) ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i> Lihat</a> </td>
             </tr>
           <?php endforeach; ?>
           </tbody>

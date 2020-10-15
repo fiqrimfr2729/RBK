@@ -47,7 +47,7 @@ class Pengumuman extends CI_Controller{
 		];
 
 		$this->db->insert('komentar', $data);
-		redirect('Pengumuman/detail_pengumuman/' . $id_pengumuman);
+		redirect('Siswa/Pengumuman/detail_pengumuman/' . $id_pengumuman);
 	}
 
 

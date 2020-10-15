@@ -23,6 +23,9 @@ class M_data_absensi extends CI_Model {
 		// $this->db->from('kelas');
 		$sekolah = $this->session->userdata('id_sekolah');
 		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
+		$this->db->where('kelas.tingkatan', '1');
+		$this->db->or_where('kelas.tingkatan', '2');
+		$this->db->or_where('kelas.tingkatan', '3');
 		$this->db->order_by('kelas.tingkatan','ASC');
 		$this->db->order_by('jurusan.nama_jurusan','ASC');
 		$this->db->order_by('kelas.urutan_kelas','ASC');
@@ -42,14 +45,16 @@ class M_data_absensi extends CI_Model {
 	}
 
 	function tampilkan_siswa($id_kelas, $tanggal) {
-		$this->db->from('siswa')->select('siswa.nis, siswa.nama_siswa, siswa.id_kelas,jurusan.id_jurusan, jurusan.singkatan_jurusan, kelas.tingkatan, kelas.urutan_kelas, absensi.keterangan');
+		$this->db->from('siswa')->select('siswa.nis, siswa.nama_siswa, siswa.id_kelas,jurusan.id_jurusan, jurusan.singkatan_jurusan, kelas.tingkatan, kelas.urutan_kelas');
 		$this->db->join('kelas','kelas.id_kelas=siswa.id_kelas');
-		$this->db->join('absensi', 'absensi.nis=siswa.nis');
 		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
 		$this->db->where('kelas.id_kelas',$id_kelas);
-		$this->db->where('absensi.tanggal',$tanggal);
 		$this->db->order_by('siswa.nama_siswa','ASC');
-		$siswa=$this->db->get()->result_array();
+		$siswa=$this->db->get()->result();
+
+		foreach($siswa as $data){
+			$data->absensi=$this->db->from('absensi')->where('nis', $data->nis)->where('tanggal', $tanggal)->get()->row();
+		}
 
 		return $siswa;
 	}

@@ -49,7 +49,10 @@
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Bimkos</span>
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php if($this->session->userdata('level')=='admin'){echo 'Admin';}else{
+          $guru = $this->db->from('guru')->where('nik', $this->session->userdata('nik'))->get()->row();
+          echo $guru->nama_guru;
+        } ?></span>
         <img class="img-profile rounded-circle" src="<?php echo base_url() ?>assets/admin/img/login_img.jpg">
       </a>
       <!-- Dropdown - User Information -->

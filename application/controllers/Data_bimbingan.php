@@ -72,23 +72,30 @@ class Data_bimbingan extends CI_Controller
         $this->load->view('admin/partial/index_admin',$data);
     }
 
-    public function kirim_balasan($id_bimbingan){
-        $data = array(
-                'id_users' => $this->session->userdata('id_users'),
-                'isi_balasan' => $this->input->post('balasan'),
-                'tanggal_balasan' => date('Y-m-d H:i:s')
-        );
+    public function kirim_bimbingan(){
+        $id_sekolah = $this->session->userdata('id_sekolah');
+        $nik = $this->session->userdata('nik');
+        $id_bimbingan = $this->input->post('id_bimbingan');
+        $config = [
+            'keyFilePath' => './bimkos-d7a96-firebase-adminsdk-15us9-4475d82d63.json',
+            'projectId' => "bimkos-d7a96",
+        ];
+        $firestore = new FirestoreClient($config);
+        $id_chat = date('ymdhms');
 
-        if ($this->M_data_bimbingan->edit_bimbingan($id_bimbingan, $data)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Balasan berhasil dikirim!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                              <span aria-hidden='true'>&times;</span>
-                            </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Balasan gagal dikirim<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                              <span aria-hidden='true'>&times;</span>
-                            </button></div>");
-        }
-        redirect('data_bimbingan/baca_bimbingan/'.$id_bimbingan);
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+        $data = [
+            'content' => $this->input->post('isi_bimbingan'),
+            'idFrom' => $nik,
+            'idTo' => $this->input->post('nis'),
+            'type' => 0,
+            'timestamp' => $timestamp
+        ];
+        //echo var_dump($this->input->post('nik'));
+        $firestore->collection('messages')->document($id_bimbingan)->collection($id_bimbingan)->document($timestamp)->set($data);
+
+        redirect('Data_bimbingan/bimbingan/'.$id_bimbingan);
     }
 
     public function get_bimbingan($id_bimbingan){
@@ -116,6 +123,12 @@ class Data_bimbingan extends CI_Controller
         }
 
         echo sprintf('Found %d documents!', $snapshot->size());
+
+        // $this->load->library('pdf');
+    
+        // $this->pdf->setPaper('A4', 'potrait');
+        // $this->pdf->filename = "laporan-petanikode.pdf";
+        // $this->pdf->load_view('laporan_pdf', $data);
     }
 
     public function bimbingan($id_bimbingan){
@@ -144,9 +157,7 @@ class Data_bimbingan extends CI_Controller
 
         $data['content']='data_bimbingan/view_bimbingan/view_bimbingan_guru';
         $data['user'] = $this->M_data_users->get_data_user_by_id();
-        $data['data_belum_dibaca']=array();
-        $data['data_kelas']=array();
-        $data['data_siswa']=array();
+
         $this->load->view('admin/data_bimbingan/view_bimbingan/view_bimbingan_guru', $data);
     }
 
@@ -169,4 +180,68 @@ class Data_bimbingan extends CI_Controller
         	$this->load->view('admin/partial/index_admin',$data);
         }
     }
+
+    public function laporan_pdf(){
+
+        $data = array(
+            "dataku" => array(
+                "nama" => "Petani Kode",
+                "url" => "http://petanikode.com"
+            )
+        );
+    
+        $this->load->library('pdf');
+    
+        $this->pdf->setPaper('A4', 'potrait');
+        $this->pdf->filename = "laporan-petanikode.pdf";
+        $this->pdf->load_view('laporan_pdf', $data);
+    
+    
+    }
+
+    public function rekap_bimbingan($id_bimbingan){
+        if($this->session->userdata('level')!='guru'){
+            redirect('Data_bimbingan');
+        }
+        $nik=$this->session->userdata('nik');
+        $config = [
+            'keyFilePath' => './bimkos-d7a96-firebase-adminsdk-15us9-4475d82d63.json',
+            'projectId' => "bimkos-d7a96",
+        ];
+        $firestore = new FirestoreClient($config);
+
+
+        $bimbingan =$this->M_data_bimbingan->get_bimbingan_where_id($id_bimbingan)->row(); 
+
+        $usersRef = $firestore->collection('messages')->document($id_bimbingan)->collection($id_bimbingan);
+        $snapshot = $usersRef->documents();
+
+        // echo "Siswa : $bimbingan->nama_siswa <br>";
+        // echo "Tanggal : $bimbingan->tgl_bim <br>";
+        // echo "Subjek : $bimbingan->subjek <br><br>";
+
+        // foreach ($snapshot as $bimbingan) {
+        //     echo ('bimbingan') . " : " . $bimbingan['content'] . "<br>";
+        //     echo ('dari') . " : " . $bimbingan['idFrom'] . "<br>";
+        //     echo ('untuk') . " : " . $bimbingan['idTo'] . "<br>";
+        //     echo "<br>";
+        // }
+
+        // echo sprintf('Found %d documents!', $snapshot->size());
+        $data['bimbingan'] = $bimbingan;
+        $data['data_bimbingan'] = $snapshot;
+        $data['guru'] = $this->M_data_master->get_guru($nik);
+
+
+
+        
+        $this->load->library('pdf');
+    
+        $this->pdf->setPaper('A4', 'potrait');
+        $this->pdf->filename = "laporan.pdf";
+        $this->pdf->load_view('laporan_pdf', $data);
+
+        //echo var_dump($bimbingan);
+    }
+    
 }

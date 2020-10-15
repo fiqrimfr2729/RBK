@@ -55,12 +55,12 @@
    					<div class="case">
    						<div class="row">
    							<div class="col-md-6 col-lg-6 col-xl-8 d-flex">
-   								<a href="<?php echo base_url('Pengumuman/detail_pengumuman/'.$data->id_pengumuman)?>" class="img w-100 mb-3 mb-md-0" style="background-image: url(<?php echo base_url('assets/admin/pengumuman/'.$data->foto)?>);"></a>
+   								<a href="<?php echo base_url('Siswa/Pengumuman/detail_pengumuman/'.$data->id_pengumuman)?>" class="img w-100 mb-3 mb-md-0" style="background-image: url(<?php echo base_url('assets/admin/pengumuman/'.$data->foto)?>);"></a>
    							</div>
    							<div class="col-md-6 col-lg-6 col-xl-4 d-flex">
    								<div class="text w-100 pl-md-3">
                                     <span class="subheading">pengumuman</span>
-   									<h2><a href="<?php echo base_url('Pengumuman/detail_pengumuman/'.$data->id_pengumuman)?>"><?php echo $data->judul ?></a></h2>
+   									<h2><a href="<?php echo base_url('Siswa/Pengumuman/detail_pengumuman/'.$data->id_pengumuman)?>"><?php echo $data->judul ?></a></h2>
    									
    									<div class="meta">
    										<p class="mb-0"><a href="#"><?php $originalDate = $data->tgl_buat;

@@ -15,7 +15,7 @@
           <div class="col-lg-12 ftco-animate">
     
             <h2 class="mb-3"><?php echo "Data Absensi ". $siswa->nama_siswa; ?></h2>
-            <a href="<?php echo base_url('Siswa/absensi/detail_absensi'); ?>" class="btn btn-info float-right">Detail Lengkap</a>
+            <a href="<?php echo base_url('Siswa/absensi/detail_absensi'); ?>" class="btn btn-info float-right"> <i class="fas fa-list"> </i> Detail Lengkap  </a>
             <div class="table-responsive">
             <table class="table table-striped">
                 <thead>

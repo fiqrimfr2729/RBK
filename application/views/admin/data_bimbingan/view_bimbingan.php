@@ -29,7 +29,7 @@
               <td><?php if($bimbingan['tingkatan'] == '1'){echo 'X';}elseif($bimbingan['tingkatan'] == '2'){echo 'XI';}elseif($bimbingan['tingkatan'] == '3'){echo 'XII';} 
               echo ' ' . $bimbingan['singkatan_jurusan'] . ' ' . $bimbingan['urutan_kelas'] ?> </td>
               <td><?php if($bimbingan['status_by_guru']==0){echo "Belum dibaca";}else{echo "Sudah dibaca";} ?> </td>
-              <td> <a href="<?php echo base_url('Data_bimbingan/get_bimbingan/'.$bimbingan['id_bimbingan']) ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i> Lihat</a> </td>
+              <td> <a href="<?php echo base_url('Data_bimbingan/bimbingan/'.$bimbingan['id_bimbingan']) ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i> Lihat</a> </td>
             </tr>
           <?php endforeach; ?>
           </tbody>

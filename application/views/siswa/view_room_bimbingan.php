@@ -20,74 +20,32 @@
 	<div class="content">
 		<div class="contact-profile">
 			<img src=" <?php echo base_url ('assets/admin/user.png')?>" alt="" />
-			<p><?php echo "nama"; ?></p>
+			<p><?php echo $guru->nama_guru; ?></p>
 			
 		</div>
 		<div class="messages">
 			<ul>
-				
-				<li class="sent">
+      <?php foreach($isi_bimbingan as $data): ?>
+				<li class="<?php if($data['idFrom'] == $data_bimbingan->nis){echo "sent";}else{
+					echo "replies";
+				} ?>">
 					<img src="<?php echo base_url ('assets/admin/user.png')?>" alt="" />
-					<p><?php echo "Here are some characters that are commonly used for times:
-
-H - 24-hour format of an hour (00 to 23)
-h - 12-hour format of an hour with leading zeros (01 to 12)
-i - Minutes with leading zeros (00 to 59)
-s - Seconds with leading zeros (00 to 59)
-a - Lowercase Ante meridiem and Post meridiem (am or pm)
-
-The example below outputs the current time in the specified format:" ?></p>
-                </li>
-                
-                <li class="replies">
-					<img src="<?php echo base_url ('assets/admin/user.png')?>" alt="" />
-					<p><?php echo "Here are some characters that are commonly used for times:
-
-H - 24-hour format of an hour (00 to 23)
-h - 12-hour format of an hour with leading zeros (01 to 12)
-i - Minutes with leading zeros (00 to 59)
-s - Seconds with leading zeros (00 to 59)
-a - Lowercase Ante meridiem and Post meridiem (am or pm)
-
-The example below outputs the current time in the specified format:" ?></p>
-                </li>
-                
-                <li class="replies">
-					<img src="<?php echo base_url ('assets/admin/user.png')?>" alt="" />
-					<p><?php echo "Here are some characters that are commonly used for times:
-
-H - 24-hour format of an hour (00 to 23)
-h - 12-hour format of an hour with leading zeros (01 to 12)
-i - Minutes with leading zeros (00 to 59)
-s - Seconds with leading zeros (00 to 59)
-a - Lowercase Ante meridiem and Post meridiem (am or pm)
-
-The example below outputs the current time in the specified format:" ?></p>
-                </li>
-                
-                <li class="sent">
-					<img src="<?php echo base_url ('assets/admin/user.png')?>" alt="" />
-					<p><?php echo "Here are some characters that are commonly used for times:
-
-H - 24-hour format of an hour (00 to 23)
-h - 12-hour format of an hour with leading zeros (01 to 12)
-i - Minutes with leading zeros (00 to 59)
-s - Seconds with leading zeros (00 to 59)
-a - Lowercase Ante meridiem and Post meridiem (am or pm)
-
-The example below outputs the current time in the specified format:" ?></p>
+					<p><?php echo $data['content'] ?></p>
 				</li>
-				
-
-				
+				<?php endforeach; ?>
+			
 			</ul>
 		</div>
 
 		<div class="message-input">
 			<div class="wrap">
-			<input type="text" placeholder="Write your message..." />
-			<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+      <form action="<?php echo base_url('Siswa/bimbingan/kirim_bimbingan'); ?>" method="post">
+        <input type="text" name="isi_bimbingan" placeholder="Ketik bimbingan anda....." required />
+        <input type="hidden" name="nik" value='<?php echo $guru->nik; ?>'/>
+        <input type="hidden" name="id_bimbingan" value='<?php echo $data_bimbingan->id_bimbingan; ?>'/>
+        <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
+        <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+      </form>
 			</div>
 		</div>
 	</div>

@@ -139,8 +139,8 @@
                   </div>
                 </div>
 
-                <li class="nav-item <?php if(!empty($menu) && $menu == 'data_belajar'){echo 'active';}; ?>">
-                  <a class="nav-link" href="<?php echo base_url('data_belajar') ?>">
+                <li class="nav-item <?php if(!empty($menu) && $menu == 'data_pengumuman'){echo 'active';}; ?>">
+                  <a class="nav-link" href="<?php echo base_url('data_pengumuman') ?>">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <b> <span>Data Pengumuman</span></b></a>
                   </li>

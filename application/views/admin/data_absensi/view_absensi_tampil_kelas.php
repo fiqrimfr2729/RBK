@@ -37,16 +37,17 @@
                 <tr>
 
                   <td align="center"><?php echo $no++; ?></td>
-                  <td><?php echo $siswa['nis'] ?>
-                    <input type="hidden" name="id_jurusan[]" value="<?php echo $siswa['id_jurusan'] ?>">
-                    <input type="hidden" name="id_siswa[]" value="<?php echo $siswa['nis'] ?>">
+                  <td><?php echo $siswa->nis ?>
+                    <input type="hidden" name="id_jurusan[]" value="<?php echo $siswa->id_jurusan ?>">
+                    <input type="hidden" name="id_siswa[]" value="<?php echo $siswa->nis ?>">
+                    <input type="hidden" name="date" value="<?php echo $tanggal ?>">
                   </td>
-                  <td><?php echo $siswa['nama_siswa'] ?></td>
+                  <td><?php echo $siswa->nama_siswa ?></td>
                   <!-- Read kelas siswa -->
                   <td> 
                     <?php
-                    if($siswa['tingkatan']=='1'){echo "X";}elseif($siswa['tingkatan']=='2'){echo "XI";}elseif($siswa['tingkatan']=='3'){echo "XII";}
-                    echo ' '.$siswa['singkatan_jurusan']. ' ' . $siswa['urutan_kelas'];
+                    if($siswa->tingkatan=='1'){echo "X";}elseif($siswa->tingkatan=='2'){echo "XI";}elseif($siswa->tingkatan=='3'){echo "XII";}
+                    echo ' '.$siswa->singkatan_jurusan. ' ' . $siswa->urutan_kelas;
                     ?>
                   </td>
 
@@ -54,16 +55,20 @@
                     <div class="btn-group">  
                       <select name="keterangan[]" id="Keterangan" class="form-control" required >
                         <option selected disabled>Pilih</option>
-                        <option <?php if($siswa['keterangan']=="S"){echo "selected";} ?> value="S">Sakit</option>
-                        <option <?php if($siswa['keterangan']=="A"){echo "selected";} ?> value="A">Absen</option>
-                        <option <?php if($siswa['keterangan']=="H"){echo "selected";} ?> value="H">Hadir</option>
-                        <option <?php if($siswa['keterangan']=="I"){echo "selected";} ?> value="I">Izin</option>
+                        <?php if($siswa->absensi != null): ?>
+                        <option <?php if($siswa->absensi->keterangan=="S"){echo "selected";} ?> value="S">Sakit</option>
+                        <option <?php if($siswa->absensi->keterangan=="A"){echo "selected";} ?> value="A">Absen</option>
+                        <option <?php if($siswa->absensi->keterangan=="H"){echo "selected";} ?> value="H">Hadir</option>
+                        <option <?php if($siswa->absensi->keterangan=="I"){echo "selected";} ?> value="I">Izin</option>
+                        <?php else: ?>
+                        <option value="S">Sakit</option>
+                        <option value="A">Absen</option>
+                        <option value="H">Hadir</option>
+                        <option value="I">Izin</option>
+                        <?php endif; ?>
                       </select>
                     </div>
-                            <!-- <a href="<?php echo site_url('Data_absensi/tambah_user_siswa') ?>/<?php echo $siswa['NIS'] ?>" class="btn btn-primary" style="margin-right: 10px"><i class="fa fa-plus"></i></a>
-              <a href="javascript:;" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['NIS'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-search"></i></a>
-              <a href="javascript:;" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['NIS'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
-              <a href="javascript:;" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['NIS'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a> -->
+                           
               <td>
               </tr>
             <?php }

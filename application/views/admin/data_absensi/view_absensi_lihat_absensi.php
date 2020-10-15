@@ -30,7 +30,7 @@
               <td align="center"><?php echo $absensi['nama_siswa'] ?></td>
               <td align="center"><?php echo $absensi['nis'] ?></td>
               <td align="center"><?php echo $absensi['id_jurusan'] ?></td>
-              <td align="center"><?php echo $absensi['Keterangan'] ?></td>
+              <td align="center"><?php echo  "s" ?></td>
               <!-- Read kelas siswa -->
 
 

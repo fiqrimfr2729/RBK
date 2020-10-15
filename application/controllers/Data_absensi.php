@@ -302,17 +302,17 @@ public function siswa(){
 }
 
 
-public function add_siswa(){
+    public function add_siswa(){
 
 
-    $this->M_data_absensi->add_siswa();
+        $this->M_data_absensi->add_siswa();
 
-    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-      <span aria-hidden='true'>&times;</span>
-      </button></div>");
-    
-    redirect('data_absensi/siswa');
-}
+        $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>&times;</span>
+        </button></div>");
+        
+        redirect('data_absensi/siswa');
+    }
 
 
 public function add_rekap(){
@@ -328,20 +328,20 @@ redirect('data_absensi/tampil_rekap?id_kelas='.$this->input->post('id_kelas'));
     // var_dump($insert_data);
 }
 
-public function rekapAbsensiSiswa()
-{
-    $data['menu']='data_absensi';
-    $data['mode']='kelas';
-    $data['content']='data_absensi/view_absensi_pilih_rekap_siswa';
-    $data['user'] = $this->M_data_users->get_data_user_by_id();
-    $data['kelas']=$this->M_data_absensi->pilih_kelas();
-    $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
-    $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
-    $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
-    $data['data_tingkatan']=array();
-    $data['data_belum_dibaca']=array();
-    $this->load->view('admin/partial/index_admin',$data);
-}
+    public function rekapAbsensiSiswa()
+    {
+        $data['menu']='data_absensi';
+        $data['mode']='kelas';
+        $data['content']='data_absensi/view_absensi_pilih_rekap_siswa';
+        $data['user'] = $this->M_data_users->get_data_user_by_id();
+        $data['kelas']=$this->M_data_absensi->pilih_kelas();
+        $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
+        $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
+        $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
+        $data['data_tingkatan']=array();
+        $data['data_belum_dibaca']=array();
+        $this->load->view('admin/partial/index_admin',$data);
+    }
 
   public function tampil_rekap_siswa() {
     $id_sekolah = $this->session->userdata('id_sekolah');

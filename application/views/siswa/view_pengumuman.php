@@ -36,7 +36,7 @@
                     <h3><?php if($data->nama_siswa != null){echo $data->nama_siswa;}else{echo $data->nama_guru;} ?></h3>
                     <div class="meta mb-3"><?php $originalDate = $data->tanggal;
                                                     $newDate = date("F d, Y h:i a", strtotime($originalDate)); echo $newDate; ?></div>
-                    <p><?php echo $data->isi_komentar ?><p><a href="#" class="reply">Reply</a></p>
+                    <p><?php echo $data->isi_komentar ?><p>
                   </div>
                 </li>
 
@@ -48,7 +48,7 @@
               
               <div class="comment-form-wrap pt-5">
                 <h3 class="mb-5">Tinggalkan Komentar</h3>
-                <form action="<?php echo base_url('Pengumuman/kirim_komentar'); ?>" class="p-5 bg-light" method="post">
+                <form action="<?php echo base_url('Siswa/Pengumuman/kirim_komentar'); ?>" class="p-5 bg-light" method="post">
                 <input type="hidden"  name="id_pengumuman" value="<?php echo $pengumuman->id_pengumuman ?>" required="">    
                   <div class="form-group">
                     <label for="message">Isi Komentar</label>

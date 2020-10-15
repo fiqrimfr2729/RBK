@@ -64,4 +64,8 @@ class M_data_belajar extends CI_Model {
 						->delete('pengumuman');
 	}
 
+	public function delete_komentar($id_komentar){
+		return $this->db->where('id_komentar', $id_komentar)->delete('komentar');
+	}
+
 }

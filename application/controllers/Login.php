@@ -9,7 +9,7 @@ class Login extends CI_Controller {
       if ($this->session->userdata('level')=='admin' || $this->session->userdata('level')=='guru') {
         redirect('admin/dashboard');
       } elseif($this->session->userdata('level')=='siswa') {
-        redirect('Siswa');
+        redirect('Siswa/dashboard');
       }
     }else{    
       $this->load->model('M_login');

@@ -32,11 +32,12 @@
               <td align="center"> <?php echo $siswa['nama_siswa'] ?> </td>
               <td align="center"> 
               <?php if ($this->session->userdata('level') == "admin") : ?>
-                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
-                <a href="javascript:;" title="edit" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['nis'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
-                <a href="javascript:;" title="hapus" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['nis'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                <a href="javascript:;" title="Detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
+                <a href="javascript:;" title="Edit" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['nis'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
+                <a href="javascript:;" title="Hapus" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['nis'] ?>" class="btn btn-danger" style="margin-right: 10px"><i class="fas fa-trash"></i></a>
+                <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$siswa['nis'] ?>" title="detail" class="btn btn-info"><i class="fas fa-eye"></i> </a>
               <?php else: ?>
-                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis']; ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i>  Detail</a>
+                <a href="javascript:;" title="Detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis']; ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i>  Detail</a>
 
                 <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$siswa['nis'] ?>" title="detail" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i>  Bimbingan </a>
               <?php endif; ?>
@@ -56,15 +57,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete this data?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Apa anda yakin akan menghapus data siswa ini?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Click yes if you sure</div>
+        <div class="modal-body">Klik ya jika anda yakin.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="<?php echo base_url('data_master/delete_siswa/'.$siswa['nis']) ?>">Yes!</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Kembali</button>
+          <a class="btn btn-primary" href="<?php echo base_url('data_master/delete_siswa/'.$siswa['nis']) ?>">Ya</a>
         </div>
       </div>
     </div>
@@ -101,7 +102,7 @@
             <select name="id_kelas" class="form-control">
               <option selected="" disabled="">--Please select--</option>
               <?php foreach ($data_kelas as $kelas) { ?>
-              <option <?php if($kelas['id_kelas']==$siswa['id_kelas']){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
+              <option <?php if($kelas['id_kelas']==$siswa['id_kelas']){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php if($kelas['tingkatan']=='1'){echo 'X';}elseif($kelas['tingkatan']=='2'){echo 'XI';}else{echo 'XII';} echo' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
               <?php } ?>
             </select>
           </div>
@@ -257,22 +258,22 @@
           <div class="form-group">       
             <label>Nama Siswa</label>
             <input type="hidden" name="id_sekolah" class="form-control" value="<?php echo $this->session->userdata('id_sekolah' ); ?>">
-            <input type="text" name="nama_siswa" value="123" placeholder="Masukkan Nama Siswa" class="form-control" required="">
+            <input type="text" name="nama_siswa" value="" placeholder="Masukkan Nama Siswa" class="form-control" required="" autocomplete='off'>
           </div>
 
           <div class="form-group">
             <label>NIS</label>
-            <input type="text" name="nis" value="123" placeholder="Masukkan NIS" class="form-control" required="">
+            <input type="text" name="nis" value="" placeholder="Masukkan NIS" class="form-control" required="" autocomplete='off'>
           </div>
           <div class="form-group">
             <label>NISN</label>
-            <input type="text" name="nisn" value="123" placeholder="Masukkan NISN" class="form-control" required="">
+            <input type="text" name="nisn" value="" placeholder="Masukkan NISN" class="form-control" required="" autocomplete='off'>
           </div>
 
           <div class="form-group">
             <label>Kelas</label>
              <input type="hidden" name="id_kelas" class="form-control" value="<?php echo $id_kelas; ?>">
-             <input type="text" name="nama kelas" class="form-control" value="<?php echo $nama_kelas['tingkatan'];?> <?php echo $nama_kelas['nama_jurusan']; ?> <?php echo $nama_kelas['urutan_kelas']; ?>" readonly>
+             <input type="text" name="nama kelas" class="form-control" value="<?php if($nama_kelas['tingkatan']=='1'){echo 'X';}elseif($nama_kelas['tingkatan']=='2'){echo 'XI';}else{echo 'XII';}?> <?php echo $nama_kelas['nama_jurusan']; ?> <?php echo $nama_kelas['urutan_kelas']; ?>" readonly>
           </div>
 
           <div class="form-group">       
@@ -291,49 +292,37 @@
 
        <div class="form-group">
         <label>Tempat Lahir</label>
-        <input type="text" placeholder="masukkan tempat lahir" value="bb" name="tempat_lahir" class="form-control" required="">
+        <input type="text" placeholder="masukkan tempat lahir" value="" name="tempat_lahir" class="form-control" required="" autocomplete='off'>
       </div>
 
       <div class="form-group">
         <label>Tanggal Lahir</label>
-        <input type="date" placeholder="Tanggal lahir" value="bb" name="tanggal_lahir" class="form-control" required="">
-      </div>
-
-      <div class="form-group">
-        <label>Agama</label>
-        <select name="agama" class="form-control" required="">
-          <option disabled="">--Pilih Agama--</option>
-          <option selected="" value="islam">Islam</option>
-          <option value="kristen">Kristen</option>
-          <option value="katolik">Katolik</option>
-          <option value="hindu">Hindu</option>
-          <option value="budha">Budha</option>
-        </select>
+        <input type="date" placeholder="Tanggal lahir" value="" name="tanggal_lahir" class="form-control" required="" autocomplete='off'>
       </div>
 
       <div class="form-group">       
         <label>Alamat</label>
-        <textarea class="form-control" value="bb" name="alamat" placeholder="masukkan alamat"></textarea>
+        <textarea class="form-control" value="" name="alamat" placeholder="masukkan alamat"></textarea>
       </div>
 
       <div class="form-group">
         <label>Nomor Telepon</label>
-        <input type="text" class="form-control" value="123" placeholder="nomor telepon" name="no_hp" required="" id="txtPhone"><span id="spnPhoneStatus"></span>
+        <input type="text" class="form-control" value="" placeholder="nomor telepon" name="no_hp" required="" id="txtPhone" autocomplete='off'><span id="spnPhoneStatus"></span>
       </div>
 
       <div class="form-group">
         <label>Email</label>
-        <input type="email" name="email" value="bb" placeholder="email" class="form-control" required="">
+        <input type="email" name="email" value="" placeholder="email" class="form-control" required="" autocomplete='off'>
       </div>
 
       <div class="form-group">       
         <label>Nama Ayah</label>
-        <input type="text" name="nama_ayah" value="bb" placeholder="nama ayah" class="form-control" required="">
+        <input type="text" name="nama_ayah" value="" placeholder="nama ayah" class="form-control" required="" autocomplete='off'>
       </div>
 
       <div class="form-group">       
         <label>Nama Ibu</label>
-        <input type="text" name="nama_ibu" value="bb" placeholder="nama ibu" class="form-control" required="">
+        <input type="text" name="nama_ibu" value="" placeholder="nama ibu" class="form-control" required="" autocomplete='off'>
       </div>
 
       <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">

@@ -99,11 +99,10 @@ class Data_master extends CI_Controller
         $data['user'] = $this->M_data_users->get_data_user_by_id();
         $data['content']='data_master/view_master_pilih_kelas';
         $data['kelas']=$this->M_data_master->pilih_kelas($id_sekolah);
-        $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
-        $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
-        $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
-        $data['data_tingkatan']=array();
+        
+       
         $data['data_belum_dibaca']=array();
+        //echo var_dump($data['data_kelas']);
         $this->load->view('admin/partial/index_admin',$data);
     }
     

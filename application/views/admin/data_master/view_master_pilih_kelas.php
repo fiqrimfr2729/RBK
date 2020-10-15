@@ -13,8 +13,8 @@
         <label>Pilih Kelas</label>
         <select name="id_kelas" class="form-control" style="max-width: 300px;">
           <option selected="" disabled="">-- Silahkan Pilih --</option>
-          <?php foreach ($kelas as $key => $value) { ?>
-          <option value="<?php echo $value->id_kelas ?>"><?php if($value->tingkatan==1){echo 'X';}elseif($value->tingkatan==2){echo 'XI';}else{echo 'XII';} ?> <?php echo $value->singkatan_jurusan; ?> <?php echo $value->urutan_kelas; ?></option>
+          <?php foreach ($kelas as $value) { ?>
+          <option value="<?php echo $value->id_kelas ?>"><?php if($value->tingkatan=='1'){echo 'X';}elseif($value->tingkatan=='2'){echo 'XI';}else{echo 'XII';} ?> <?php echo $value->singkatan_jurusan; ?> <?php echo $value->urutan_kelas; ?></option>
           <?php } ?>
         </select>
       </div>
