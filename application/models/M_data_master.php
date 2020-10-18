@@ -24,7 +24,7 @@ class M_data_master extends CI_Model {
 		// $this->db->from('kelas');
 		$sekolah = $this->session->userdata('id_sekolah');
 		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
-		$this->db->where('tingkatan', '1')->or_where('tingkatan', '2')->or_where('tingkatan', '3');
+		$this->db->where('tingkatan !=', '4');
 		$this->db->order_by('jurusan.nama_jurusan','ASC');
 		$this->db->order_by('kelas.tingkatan','ASC');
 		$this->db->order_by('kelas.urutan_kelas','ASC');
@@ -97,12 +97,14 @@ class M_data_master extends CI_Model {
 	}
 
 	public function get_kelas($id_sekolah){
+		$this->db->from('kelas');
 		$this->db->join('jurusan', 'jurusan.id_jurusan = kelas.id_jurusan');
-		$this->db->where('tingkatan', '1')->or_where('tingkatan', '2')->or_where('tingkatan', '3');
+		$this->db->where('jurusan.id_sekolah', $id_sekolah);
+		$this->db->where('kelas.tingkatan !=', '4');
 		$this->db->order_by('kelas.tingkatan','ASC');
 		$this->db->order_by('kelas.urutan_kelas','ASC');
 		$this->db->order_by('jurusan.nama_jurusan','ASC');
-		return $this->db->get_where('kelas', ['jurusan.id_sekolah' => $id_sekolah]);
+		return $this->db->get();
 	}
 
 	public function get_kelas_alumni($id_sekolah){

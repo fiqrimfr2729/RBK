@@ -34,6 +34,7 @@ class Kelas extends CI_Controller
        
         $data['data_belum_dibaca']=array();
         $this->load->view('admin/partial/index_admin',$data);
+        //echo var_dump($id_sekolah);
     }
 
     public function test(){
