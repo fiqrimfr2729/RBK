@@ -49,8 +49,8 @@
           <h6 class="collapse-header"><b>Data Sekolah</b></h6>
           <a class="collapse-item <?php if(!empty($mode) && $mode == 'admin/jurusan'){echo 'active';}; ?>" href="<?php echo base_url('Jurusan') ?>"><b>Jurusan</b></a>
           <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo base_url('Kelas') ?>"><b>Kelas</b></a>
-          <!-- <a class="collapse-item <?php if(!empty($mode) && $mode == 'siswa' && $menu =='Data_master'){echo 'active';}; ?>" href="<?php echo base_url('Data_master/siswa') ?>">Siswa</a> -->
-          <a class="collapse-item <?php if(!empty($mode) && $mode == 'kelas'){echo 'active';}; ?>" href="<?php echo site_url('Data_master/select_class'); ?>"><b>Siswa</b></a>
+          <a class="collapse-item <?php if(!empty($mode) && $mode == 'siswa'){echo 'active';}; ?>" href="<?php echo site_url('Data_master/select_class'); ?>"><b>Siswa</b></a>
+          <a class="collapse-item <?php if(!empty($mode) && $mode == 'guru'){echo 'active';}; ?>" href="<?php echo site_url('Data_master/guru'); ?>"><b>Guru</b></a>
         </div>
       </div>
     </li>
@@ -87,27 +87,6 @@
         </li><?php } ?>
 
 
-        <!-- Nav Item - Utilities Collapse Menu -->
-     <!--  <li class="nav-item <?php if(!empty($menu) && $menu == 'data_pelanggaran'){echo 'active';}; ?>">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-fa fa-exclamation-circle"></i>
-          <span>Data Pelanggaran</span>
-        </a>
-        <div id="collapseUtilities" class="collapse <?php if(!empty($menu) && $menu == 'data_pelanggaran'){echo 'show';}; ?>" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Data Pelanggaran</h6>
-            <a class="collapse-item <?php if(!empty($mode) && $mode == 'kategori_pelanggaran'){echo 'active';}; ?>" href="<?php echo base_url('data_pelanggaran/kategori_pelanggaran') ?>">Kategori Pelanggaran</a>
-            <a class="collapse-item <?php if(!empty($mode) && $mode == 'pelanggaran'){echo 'active';}; ?>" href="<?php echo base_url('data_pelanggaran/pelanggaran') ?>">Pelanggaran</a>
-          </div>
-        </div>
-      </li> -->
-
-      <!-- Nav Item - Charts -->
-      <!-- <li class="nav-item <?php if(!empty($menu) && $menu == 'data_konseling'){echo 'active';}; ?>">
-        <a class="nav-link" href="<?php echo base_url('data_konseling') ?>">
-          <i class="fas fa-book-open"></i>
-          <b><span>Data Konseling</span></b></a>
-        </li> -->
 
         <!-- Nav Item - Tables -->
         <li class="nav-item <?php if(!empty($menu) && $menu == 'data_bimbingan'){echo 'active';}; ?>">

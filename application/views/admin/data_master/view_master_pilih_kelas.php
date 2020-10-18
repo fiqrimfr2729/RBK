@@ -8,7 +8,7 @@
   </div>
   <div class="card-body">
     <div class="table-responsive">
-      <form action="<?php echo site_url('Data_master/tampil_kelas'); ?>" method="GET">
+      <form action="<?php echo site_url('Data_master/tampil_siswa'); ?>" method="GET">
        <div class="form-group">
         <label>Pilih Kelas</label>
         <select name="id_kelas" class="form-control" style="max-width: 300px;">

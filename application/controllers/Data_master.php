@@ -24,78 +24,10 @@ class Data_master extends CI_Controller
         }
     }
 
-    
-    public function jurusan(){
-        $data['menu']='data_master';
-        $data['mode']='jurusan';
-        $data['content']='data_master/view_master_jurusan';
-        $data['user'] = $this->M_data_users->get_data_user_by_id();
-        $data['data_jurusan']=$this->M_data_master->get_jurusan()->result_array();
-        $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
-        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
-        $this->load->view('admin/partial/index_admin',$data);
-    }
-
-    public function add_jurusan(){
-        $data = array(
-            'nama_jurusan' => $this->input->post('jurusan'),
-            'id_sekolah' => $this->session->userdata('id_sekolah')
-            );
-
-        if ($this->M_data_master->add_jurusan($data)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        }
-        redirect('data_master/jurusan');
-    }
-
-    public function edit_jurusan($id_jurusan){
-        $data = array(
-            'nama_jurusan' => $this->input->post('jurusan')
-            );
-
-        if ($this->M_data_master->edit_jurusan($id_jurusan, $data)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        }
-        redirect('data_master/jurusan');
-    }
-
-    public function delete_jurusan($id_jurusan){
-        if ($this->M_data_master->delete_jurusan($id_jurusan)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil hapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal dihapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        }
-        redirect('data_master/jurusan');
-    }
-
-    function cetak_kelas($id_kelas) {
-        $this->load->library('mypdf');
-        $data['kelas']=$this->M_data_master->get_kelas_sekarang($id_kelas)->row();
-        $data['result_print']=$this->M_data_master->view_class($id_kelas);
-        $data['user'] = $this->M_data_users->get_data_user_by_id();
-        $this->mypdf->generate('admin/data_users/cetak_kelas',$data);
-    }
-
     public function select_class() {
         $id_sekolah = $this->session->userdata('id_sekolah');
         $data['menu']='data_master';
-        $data['mode']='kelas';
+        $data['mode']='siswa';
         $data['user'] = $this->M_data_users->get_data_user_by_id();
         $data['content']='data_master/view_master_pilih_kelas';
         $data['kelas']=$this->M_data_master->pilih_kelas($id_sekolah);
@@ -107,7 +39,7 @@ class Data_master extends CI_Controller
     }
     
 
-    public function tampil_kelas() {
+    public function tampil_siswa() {
         $id_sekolah = $this->session->userdata('id_sekolah');
         $data['menu']='data_master';
         $data['mode']='kelas';
@@ -125,84 +57,110 @@ class Data_master extends CI_Controller
         $this->load->view('admin/partial/index_admin',$data);
     }
 
-    public function kelas(){
+    public function guru() {
+        $id_sekolah = $this->session->userdata('id_sekolah');
         $data['menu']='data_master';
         $data['mode']='kelas';
-        $data['content']='data_master/view_master_kelas';
+        $data['id_kelas']=$this->input->GET('id_kelas',TRUE);
         $data['user'] = $this->M_data_users->get_data_user_by_id();
-        $data['data_kelas']=$this->M_data_master->get_kelas()->result_array();
-        $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
-        $data['data_jurusan']=$this->M_data_master->get_jurusan()->result_array();
-        $data['data_tingkatan']=$this->M_data_master->get_tingkatan()->result_array();
-        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+        $id_kelas=$this->input->GET('id_kelas',TRUE);
+        $data['kelas']=array();
+        $data['nama_kelas']=array();
+        $data['data_guru'] = $this->M_data_master->get_all_guru($id_sekolah);
+        $data['content']='data_master/view_master_guru';
+        $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
+        $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
+        $data['data_tingkatan']=array();
+        $data['data_belum_dibaca']=array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
-    public function add_kelas(){
-        $data = array(
-            'tingkatan' => $this->input->post('tingkatan'),
-            'id_jurusan' => $this->input->post('jurusan'),
-            'urutan_kelas' => $this->input->post('urutan'),
-            'id_sekolah' => $this->session->userdata('id_sekolah'),
-            'tahun_masuk' => $this->input->post('tahun_masuk')
-            );
+    public function add_guru(){
+        $this->form_validation->set_error_delimiters('', '');
+        
+        $this->form_validation->set_rules('nik', 'NIK', 'required|is_unique[guru.nik]',
+            array(
+                'required' => 'NIK Tidak boleh kosong',
+                'is_unique' => 'Data NIK sudah ada'
+            ));
 
-        if ($this->M_data_master->add_kelas($data)) {
+        $data = array(
+            'nik'           => $this->input->post('nik'),
+            'nama_guru'     => $this->input->post('nama_guru'),
+            'alamat_guru'   => $this->input->post('alamat'),
+            'email_guru'    => $this->input->post('email'),
+            'id_jabatan'    => '1',
+            'id_user'       => $this->input->post('nik'),
+            'id_sekolah'    => $this->input->post('id_sekolah'),
+            'tingkatan'     => $this->input->post('tingkatan')
+        );
+
+        $data_user = array(
+            'id_user' => $this->input->post('nik'),
+            'password' => password_hash('Guru123', PASSWORD_DEFAULT)
+        );
+
+        if($this->form_validation->run()){
+            $this->M_data_master->add_guru($data, $data_user);
+
             $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal disimpan!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        }
-        redirect('data_master/kelas');
-    }
-
-    public function naik_kelas(){
-        if($this->M_data_master->naik_kelas()){
-            redirect('data_master/kelas');
+                <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            
+            redirect('data_master/guru');
+        }else{
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>".validation_errors(). "!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            redirect('data_master/guru');
         }
     }
-    
-    public function turun_kelas(){
-        if($this->M_data_master->turun_kelas()){
-            redirect('data_master/kelas');
+
+    public function edit_guru(){
+        $id_sekolah = $this->session->userdata('id_sekolah');
+        $this->form_validation->set_error_delimiters('', '');
+        
+        $id_guru = $this->input->post('id_guru');
+        $nik_lama = $this->input->post('nik_lama');
+        $nik = $this->input->post('nik');
+        
+        if($nik != $nik_lama){
+            $check = $this->db->from('guru')->where('nik', $nik)->get()->row();
+            if($check != null){
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data NIK sudah ada<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span> </button></div>");
+                redirect('data_master/guru');
+            }
         }
+       
 
-    }
 
-    public function edit_kelas($id_kelas){
-        $data = array(
-            'id_tingkatan' => $this->input->post('tingkatan'),
-            'id_jurusan' => $this->input->post('jurusan'),
-            'urutan_kelas' => $this->input->post('urutan')
-            );
+        // $data = array(
+        //     'nik'           => $this->input->post('nik'),
+        //     'nama_guru'     => $this->input->post('nama_guru'),
+        //     'alamat_guru'   => $this->input->post('alamat'),
+        //     'email_guru'    => $this->input->post('email'),
+        //     'id_jabatan'    => '1',
+        //     'id_user'       => $this->input->post('nik'),
+        //     'id_sekolah'    => $this->input->post('id_sekolah'),
+        //     'tingkatan'     => $this->input->post('tingkatan')
+        // );
 
-        if ($this->M_data_master->edit_kelas($id_kelas, $data)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        }
-        redirect('data_master/kelas');
-    }
+        // $data_user = array(
+        //     'id_user' => $this->input->post('nik'),
+        //     'password' => password_hash('Guru123', PASSWORD_DEFAULT)
+        // );
 
-    public function delete_kelas($id_kelas){
-        if ($this->M_data_master->delete_kelas($id_kelas)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil hapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal dihapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-          </button></div>");
-        }
-        redirect('data_master/kelas');
-
+        // if ($this->M_data_master->edit_siswa($id_siswa, $data)) {
+        //     $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        //       <span aria-hidden='true'>&times;</span>
+        //   </button></div>");
+        // } else {
+        //     $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        //       <span aria-hidden='true'>&times;</span>
+        //   </button></div>");
+        // }
+        redirect('data_master/guru');
     }
 
     public function siswa(){
@@ -273,12 +231,12 @@ class Data_master extends CI_Controller
                 <span aria-hidden='true'>&times;</span>
             </button></div>");
             
-            redirect('data_master/tampil_kelas?id_kelas='.$id_kelas);
+            redirect('Data_master/tampil_siswa?id_kelas='.$id_kelas);
         }else{
             $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>".validation_errors(). "!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                 <span aria-hidden='true'>&times;</span>
             </button></div>");
-            redirect('data_master/tampil_kelas?id_kelas='.$id_kelas);
+            redirect('Data_master/tampil_siswa?id_kelas='.$id_kelas);
         }
         
     }
@@ -313,8 +271,7 @@ class Data_master extends CI_Controller
         redirect('data_master/tampil_kelas?id_kelas='.$id_kelas);
     }
 
-    public function hapusJurusan($id_jurusan)
-    {
+    public function hapusJurusan($id_jurusan){
         $this->M_data_master->delete_jurusan($id_jurusan);
         redirect('Data_master/jurusan');
     }

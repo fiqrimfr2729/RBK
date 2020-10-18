@@ -1,111 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>Bimkos - Login</title>
-
-  <!-- Place favicon.ico in the root directory -->
-  <link rel="icon" type="image/png" href="<?php echo base_url("assets/admin/") ?>img/bimkos.png" sizes="10x10" />
-
-  <!-- Custom fonts for this template-->
-  <link href="<?php echo base_url() ?>assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-  <!-- Custom styles for this template-->
-  <link href="<?php echo base_url() ?>assets/admin/css/sb-admin-2.css" rel="stylesheet">
-
-  <script>
-       $(document).ready(function(){
-           $('.captcha-refresh').on('click', function(){
-               $.get('<?php echo base_url().'Login/refresh'; ?>', function(data){
-                   $('#image_captcha').html(data);
-               });
-           });
-       });
-   </script>
-   <script src="<?php echo base_url(); ?>/js/jquery.js"></script>
-
-
+	<title>Login V15</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="<?php echo base_url('assets/login/images/icons/favicon.ico')?>"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/bootstrap/css/bootstrap.min.css')?>">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css')?>">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css')?>">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/animate/animate.css')?>">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/css-hamburgers/hamburgers.min.css')?>">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/animsition/css/animsition.min.css')?>">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/select2/select2.min.css')?>">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/daterangepicker/daterangepicker.css')?>">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/css/util.css')?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/css/main.css')?>">
+<!--===============================================================================================-->
 </head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title" style="background-image: url(<?php echo base_url('assets/login/images/bg-01.jpg')?>);">
+					<span class="login100-form-title-1">
+						Aplikasi Bimbingan Konseling
+					</span>
+				</div>
 
-<!-- <body style="background-image: url('assets/admin/img/profil.jpg');
-
-background-size: 1500px 700px;
-background-repeat: no-repeat;"> -->
-<body style="background-color: #6B8E23; 
-
-background-size: 1500px 700px;
-background-repeat: no-repeat;">
-
-  <div class="container">
-
-    <!-- Outer Row -->
-    <div class="row justify-content-center">
-
-      <div class="col-xl-6 col-lg-12 col-md-9">
-
-        <div class="card o-hidden border-0 shadow-lg my-5">
-          <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
-              
-              <div class="col-lg">
-                <div class="p-5">
-                  <div class="text-center">
-                    <h2 class="h4 text-gray-900 mb-4"><b> Sign In to Your Dashboard</b></h2>
-
-
-                    <label>Please Log In</label>
-                  </div>
-                  <form class="user" action="<?php echo base_url('login/login_validation'); ?>" method="post">
-                    <!-- Notifikasi -->
-                    <?php if ($info = $this->session->flashdata('message')) {
+				<form class="login100-form validate-form" action="<?php echo base_url('login/login_validation'); ?>" method="post">
+        <?php if ($info = $this->session->flashdata('message')) {
                       echo $info;
                     } ?>
-                    <!-- /Notifikasi -->
-                    <div class="form-group">
-                      <B><input type="text" class="form-control form-control-user" name="username" placeholder="username" autocomplete="off" required=""></B>
-                    </div>
-                    <div class="form-group">
-                      <B><input type="password" class="form-control form-control-user" name="password" placeholder="password" autocomplete="off" required=""></B>
-                    </div>
-                                        <button type="submit" class="btn bg-info btn-user btn-block"><font color="white">
-                     Log In </font>
-                    </button>
-                  </form>
-                  <hr>
-                  <div class="text-center">
-                    <a class="small" href="<?= base_url('login/forgot_password') ?>" style="text-decoration: none;">Lupa Password?</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Username tidak boleh kosong">
+						<span class="label-input100">Username</span>
+						<input class="input100" type="text" name="username" placeholder="Masukan Username">
+						<span class="focus-input100"></span>
+					</div>
 
-      </div>
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password tidak boleh kosong">
+						<span class="label-input100">Password</span>
+						<input class="input100" type="password" name="password" placeholder="Masukan password">
+						<span class="focus-input100"></span>
+					</div>
 
-    </div>
+					<div class="flex-sb-m w-full p-b-30">
 
-  </div>
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="<?php echo base_url() ?>assets/admin/vendor/jquery/jquery.min.js"></script>
-  <script src="<?php echo base_url() ?>assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="<?php echo base_url() ?>assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="<?php echo base_url() ?>assets/admin/js/sb-admin-2.min.js"></script>
+					<div class="container-login100-form-btn">
+						<button type="submit" class="login100-form-btn">
+							Login
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/vendor/jquery/jquery-3.2.1.min.js')?>"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/vendor/animsition/js/animsition.min.js')?>"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/vendor/bootstrap/js/popper.js')?>"></script>
+	<script src="<?php echo base_url('assets/login/vendor/bootstrap/js/bootstrap.min.js')?>"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/vendor/select2/select2.min.j')?>s"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/vendor/daterangepicker/moment.min.js')?>"></script>
+	<script src="<?php echo base_url('assets/login/vendor/daterangepicker/daterangepicker.js')?>"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/vendor/countdowntime/countdowntime.js')?>"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url('assets/login/js/main.js')?>"></script>
 
 </body>
-
 </html>

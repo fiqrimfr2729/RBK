@@ -211,9 +211,21 @@ class M_data_master extends CI_Model {
 		return $this->db->where('id_sekolah', $id_sekolah)->get('sekolah')->row()->nama_sekolah;
 	}
 
+	public function add_guru($data, $data_user){
+
+		$this->db->insert('users', $data_user);
+
+		$this->db->insert('guru', $data);
+	}
+
 	public function get_guru($nik){
         $guru = $this->db->from('guru')->where('nik', $nik)->get()->row();
         return $guru;
+	}
+
+	public function get_all_guru($id_sekolah){
+		$guru = $this->db->from('guru')->where('id_sekolah', $id_sekolah)->get()->result();
+		return $guru;
 	}
 	
 	public function get_guru_bk_by_tingkatan($tingkatan, $id_sekolah){
