@@ -130,6 +130,14 @@ class M_data_master extends CI_Model {
 	}
 	
 	public function turun_kelas(){
+
+		$kelas_xi = $this->db->from('kelas')->where('tingkatan', '2')->get()->row();
+		$kelas_x = $this->db->from('kelas')->where('tahun_masuk', $kelas_xi->tahun_masuk+1)->where('tingkatan', '1')->get()->row();
+
+		if($kelas_x != null){
+			return false;
+		}
+
 		$this->db->set('tingkatan', '1')->where('tingkatan', '2')->update('kelas');
 		$this->db->set('tingkatan', '2')->where('tingkatan', '3')->update('kelas');
 		$this->db->set('tingkatan', '3')->where('tingkatan', '4')->update('kelas');
@@ -194,17 +202,18 @@ class M_data_master extends CI_Model {
 	}
 
 	public function edit_siswa($id_siswa, $data){
-		return $this->db->where('NIS', $id_siswa)
+		$this->db->where('id_user', $id_siswa)->set('id_user', $data['nis'])->update('users');
+		return $this->db->where('nis', $id_siswa)
 		->update('siswa', $data);
 	}
 
 	public function delete_siswa($id_siswa){
+		$this->db->where('id_user', $id_siswa)->delete('users');
 		return $this->db->where('NIS', $id_siswa)
 		->delete('siswa');
 	}
 
-	public function hapus_jurusan($id_jurusan)
-	{
+	public function hapus_jurusan($id_jurusan){
 		return $this->db->where('id_jurusan', $id_jurusan)
 		->delete('jurusan');
 	}
@@ -218,6 +227,12 @@ class M_data_master extends CI_Model {
 		$this->db->insert('users', $data_user);
 
 		$this->db->insert('guru', $data);
+	}
+
+	public function edit_guru($id_guru, $data){
+		$this->db->where('id_user', $id_guru)->set('id_user', $data['nik'])->update('users');
+		return $this->db->where('id_guru', $id_guru)
+		->update('guru', $data);
 	}
 
 	public function get_guru($nik){

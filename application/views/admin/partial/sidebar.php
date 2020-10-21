@@ -71,20 +71,7 @@
     
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <?php if ($this->session->userdata('level') == "admin") { ?>
-      <li class="nav-item <?php if(!empty($menu) && $menu == 'data_users'){echo 'active';}; ?>">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-users"></i>
-          <b><span>Data Users</span></b>
-        </a>   
-        <div id="collapseTwo" class="collapse <?php if(!empty($menu) && $menu == 'data_users'){echo 'show';}; ?>" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><b>Users</b></h6>
-            <a class="collapse-item <?php if(!empty($mode) && $mode == 'siswa' && $menu=='data_users'){echo 'active';}; ?>" href="<?php echo base_url('data_users/siswa') ?>"><b>Users</b></a>
-            <!--   <a class="collapse-item <?php if(!empty($mode) && $mode == 'ortu' && $menu=='data_users'){echo 'active';}; ?>" href="<?php echo base_url('data_users/ortu') ?>"><b>ortu</b></a> -->
-          </div>
-        </div>
-        </li><?php } ?>
+    
 
 
 

@@ -6,7 +6,7 @@
   <div class="card-header py-3">
       <h6 class="float-left text-primary font-weight-bold" style="margin-top: 10px">Data Siswa</h6>
        <?php if ($this->session->userdata('level') == "admin") { ?>
-      <a href="javascript:;" class="btn btn-success float-right" data-toggle="modal" data-target="#tambah_guru"> <i class="fas fa-plus"></i> Tambah Siswa</a>&ensp;<?php } ?>
+      <a href="javascript:;" class="btn btn-success float-right" data-toggle="modal" data-target="#tambah_guru"> <i class="fas fa-plus"></i> Tambah Guru</a>&ensp;<?php } ?>
   </div>
 
   <div class="card-body">

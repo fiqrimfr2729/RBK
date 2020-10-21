@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login V15</title>
+	<title>Aplikasi Bimbingan Konseling</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="<?php echo base_url('assets/login/images/icons/favicon.ico')?>"/>
+	<link rel="icon" type="image/png" href="<?php echo base_url("assets/admin/") ?>img/bimkos.png"/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/login/vendor/bootstrap/css/bootstrap.min.css')?>">
 <!--===============================================================================================-->
@@ -34,7 +34,7 @@
 			<div class="wrap-login100">
 				<div class="login100-form-title" style="background-image: url(<?php echo base_url('assets/login/images/bg-01.jpg')?>);">
 					<span class="login100-form-title-1">
-						Aplikasi Bimbingan Konseling
+						Login
 					</span>
 				</div>
 

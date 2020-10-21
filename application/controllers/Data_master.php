@@ -60,7 +60,7 @@ class Data_master extends CI_Controller
     public function guru() {
         $id_sekolah = $this->session->userdata('id_sekolah');
         $data['menu']='data_master';
-        $data['mode']='kelas';
+        $data['mode']='guru';
         $data['id_kelas']=$this->input->GET('id_kelas',TRUE);
         $data['user'] = $this->M_data_users->get_data_user_by_id();
         $id_kelas=$this->input->GET('id_kelas',TRUE);
@@ -76,6 +76,7 @@ class Data_master extends CI_Controller
     }
 
     public function add_guru(){
+        $id_sekolah = $this->session->userdata('id_sekolah');
         $this->form_validation->set_error_delimiters('', '');
         
         $this->form_validation->set_rules('nik', 'NIK', 'required|is_unique[guru.nik]',
@@ -94,6 +95,19 @@ class Data_master extends CI_Controller
             'id_sekolah'    => $this->input->post('id_sekolah'),
             'tingkatan'     => $this->input->post('tingkatan')
         );
+
+        //check exist tingkat
+        $tingkatan = $this->input->post('tingkatan');
+        $guru = $this->db->from('guru')->where('tingkatan', $tingkatan)->where('id_sekolah', $id_sekolah)->get()->row();
+        if($guru != null){
+            $tingkat = '';
+            if($tingkatan == '1'){$tingkat = 'X (Sepuluh)';}elseif($tingkatan == '2'){$tingkat = 'XI (Sebelas)';}else{$tingkat = 'XII (Duabelas)';}
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>"."Data guru untuk Kelas $tingkat sudah ada". "!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            redirect('data_master/guru');
+        }
+
 
         $data_user = array(
             'id_user' => $this->input->post('nik'),
@@ -132,34 +146,28 @@ class Data_master extends CI_Controller
                 redirect('data_master/guru');
             }
         }
-       
 
+        $data = array(
+            'nik'           => $this->input->post('nik'),
+            'nama_guru'     => $this->input->post('nama_guru'),
+            'alamat_guru'   => $this->input->post('alamat'),
+            'email_guru'    => $this->input->post('email'),
+            'id_jabatan'    => '1',
+            'id_user'       => $this->input->post('nik'),
+            'id_sekolah'    => $id_sekolah,
+            'tingkatan'     => $this->input->post('tingkatan')
+        );
 
-        // $data = array(
-        //     'nik'           => $this->input->post('nik'),
-        //     'nama_guru'     => $this->input->post('nama_guru'),
-        //     'alamat_guru'   => $this->input->post('alamat'),
-        //     'email_guru'    => $this->input->post('email'),
-        //     'id_jabatan'    => '1',
-        //     'id_user'       => $this->input->post('nik'),
-        //     'id_sekolah'    => $this->input->post('id_sekolah'),
-        //     'tingkatan'     => $this->input->post('tingkatan')
-        // );
-
-        // $data_user = array(
-        //     'id_user' => $this->input->post('nik'),
-        //     'password' => password_hash('Guru123', PASSWORD_DEFAULT)
-        // );
-
-        // if ($this->M_data_master->edit_siswa($id_siswa, $data)) {
-        //     $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-        //       <span aria-hidden='true'>&times;</span>
-        //   </button></div>");
-        // } else {
-        //     $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-        //       <span aria-hidden='true'>&times;</span>
-        //   </button></div>");
-        // }
+        
+        if ($this->M_data_master->edit_guru($id_guru, $data)) {
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+          </button></div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+          </button></div>");
+        }
         redirect('data_master/guru');
     }
 
@@ -174,24 +182,6 @@ class Data_master extends CI_Controller
             $this->load->view('admin/partial/index_admin',$data);
     }
 
-    function tambah_user_siswa($NIS) {
-        $siswa_view=$this->M_data_master->lihat_user($NIS);
-        $NIS=$siswa_view[0]->NIS;
-        $nama_lengkap=$siswa_view[0]->nama_lengkap;
-        $username=$siswa_view[0]->NIS;
-        $password=$siswa_view[0]->NIS;
-        $email_admin=$siswa_view[0]->email;
-        $data=array(
-            'NIS'=>$NIS,
-            'nama_lengkap'=>$nama_lengkap,
-            'username'=>$username,
-            'password'=>md5($password),
-            'email_admin'=>$email_admin,
-            'level'=>'siswa'
-            );
-        $this->M_data_master->tambah_user($data);
-        redirect('Data_users/siswa');
-    }
 
     public function add_siswa(){
         $this->form_validation->set_error_delimiters('', '');
@@ -246,17 +236,17 @@ class Data_master extends CI_Controller
         $data = array(
             'nis' => $this->input->post('nis'),
             'nisn' => $this->input->post('nisn'),
-            'id_kelas' => $this->input->post('id_kelas'),
             'nama_siswa' => $this->input->post('nama_siswa'),
+            'id_kelas' => $this->input->post('id_kelas'),
+            'email_siswa' => $this->input->post('email'),
+            'alamat_siswa' => $this->input->post('alamat'),
+            'no_hp' => $this->input->post('no_hp'),
             'jk' => $this->input->post('jk'),
             'tempat_lahir' => $this->input->post('tempat_lahir'),
             'tanggal_lahir' => $this->input->post('tanggal_lahir'),
-            'email' => $this->input->post('email'),
-            'agama' => $this->input->post('agama'),
-            'alamat' => $this->input->post('alamat'),
-            'no_hp' => $this->input->post('no_hp'),
             'nama_ayah' => $this->input->post('nama_ayah'),
             'nama_ibu' => $this->input->post('nama_ibu'),
+            'id_user' => $this->input->post('nis')
         );
 
         if ($this->M_data_master->edit_siswa($id_siswa, $data)) {
@@ -268,12 +258,7 @@ class Data_master extends CI_Controller
               <span aria-hidden='true'>&times;</span>
           </button></div>");
         }
-        redirect('data_master/tampil_kelas?id_kelas='.$id_kelas);
-    }
-
-    public function hapusJurusan($id_jurusan){
-        $this->M_data_master->delete_jurusan($id_jurusan);
-        redirect('Data_master/jurusan');
+        redirect('data_master/tampil_siswa?id_kelas='.$id_kelas);
     }
 
     public function delete_siswa($nis){
@@ -291,7 +276,7 @@ class Data_master extends CI_Controller
               <span aria-hidden='true'>&times;</span>
           </button></div>");
         }
-        redirect('data_master/tampil_kelas?id_kelas='.$siswa->id_kelas);
+        redirect('data_master/tampil_siswa?id_kelas='.$siswa->id_kelas);
     }
 
     

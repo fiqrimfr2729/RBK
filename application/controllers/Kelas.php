@@ -48,25 +48,47 @@ class Kelas extends CI_Controller
         $tahun_masuk = $this->input->post('tahun_masuk');
         $jumlah_tambah_kelas =(int)$this->input->post('jumlah_kelas');
 
+        $check_tahun = $this->db->from('kelas')->where('tahun_masuk', $tahun_masuk)->where('tingkatan !=', $id_tingkatan)->get()->row();
+        if($check_tahun != null){
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data tahun masuk tidak sesuai<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            redirect('kelas');
+        }
+
+        $check_tahun = $this->db->from('kelas')->where('tingkatan', $id_tingkatan)->get()->row();
+        if($check_tahun != null){
+            if($check_tahun->tahun_masuk!=$tahun_masuk){
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data tahun masuk tidak sesuai<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+                </button></div>");
+                redirect('kelas');
+            }
+        }
+
         $jumlah_kelas = $this->M_data_master->get_jumlah_kelas($id_jurusan, $id_tingkatan, $tahun_masuk);
 
         $i = 0;
+        $urutan_kelas = 1;
         $data = array();
         $batas = $jumlah_kelas+$jumlah_tambah_kelas;
         do{
-            $jumlah_kelas++;
             $data_kelas = array( 
                 'tingkatan' => $this->input->post('tingkatan'),
                 'id_jurusan' => $this->input->post('jurusan'),
-                'urutan_kelas' => $jumlah_kelas,
+                'urutan_kelas' => $urutan_kelas,
                 'tahun_masuk' => $this->input->post('tahun_masuk')
             );
-            $data[$i] = $data_kelas;
-
-            $i++;
-
             
-            
+            $kelas = $this->db->get_where('kelas', $data_kelas)->row();
+            if($kelas == null){
+                $data[$i] = $data_kelas;
+                $jumlah_kelas++;
+                $i++;
+            }
+
+            $urutan_kelas++;
+
         }while($jumlah_kelas < $batas);
 
         //echo var_dump($data);
@@ -119,6 +141,14 @@ class Kelas extends CI_Controller
 
     public function turun_kelas(){
         if($this->M_data_master->turun_kelas()){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            redirect('/kelas');
+        }else{
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal diperbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button></div>");
             redirect('/kelas');
         }
 

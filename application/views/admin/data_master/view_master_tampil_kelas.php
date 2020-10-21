@@ -111,12 +111,12 @@
             <label>Jenis Kelamin</label>
             <div class="radio-inline">
               <label>
-               <input name="jk" type="radio" required="" value="Laki-Laki" <?php if($siswa['jk']=='1'){echo "checked";} ?>>Laki-laki
+               <input name="jk" type="radio" required="" value="1" <?php if($siswa['jk']=='1'){echo "checked";} ?>>Laki-laki
              </label>
            </div>
            <div class="radio-inline">
             <label>
-             <input name="jk" type="radio" required="" value="Perempuan" <?php if($siswa['jk']=='0'){echo "checked";} ?>>Perempuan
+             <input name="jk" type="radio" required="" value="0" <?php if($siswa['jk']=='0'){echo "checked";} ?>>Perempuan
            </label>
          </div>
        </div>
@@ -280,24 +280,24 @@
             <label>Jenis Kelamin</label>
             <div class="radio-inline">
               <label>
-               <input name="jk" type="radio" required="" value="Laki-Laki"> Laki-laki
+               <input name="jk" type="radio" required="" value="1"> Laki-laki
              </label>
            </div>
            <div class="radio-inline">
             <label>
-             <input name="jk" type="radio" required="" value="Perempuan"> Perempuan
+             <input name="jk" type="radio" required="" value="0"> Perempuan
            </label>
          </div>
        </div>
 
        <div class="form-group">
         <label>Tempat Lahir</label>
-        <input type="text" placeholder="masukkan tempat lahir" value="" name="tempat_lahir" class="form-control" required="" autocomplete='off'>
+        <input type="text" placeholder="masukkan tempat lahir" value="" name="tempat_lahir" class="form-control" autocomplete='off'>
       </div>
 
       <div class="form-group">
         <label>Tanggal Lahir</label>
-        <input type="date" placeholder="Tanggal lahir" value="" name="tanggal_lahir" class="form-control" required="" autocomplete='off'>
+        <input type="date" placeholder="Tanggal lahir" value="" name="tanggal_lahir" class="form-control" autocomplete='off'>
       </div>
 
       <div class="form-group">       
@@ -307,22 +307,22 @@
 
       <div class="form-group">
         <label>Nomor Telepon</label>
-        <input type="text" class="form-control" value="" placeholder="nomor telepon" name="no_hp" required="" id="txtPhone" autocomplete='off'><span id="spnPhoneStatus"></span>
+        <input type="text" class="form-control" value="" placeholder="nomor telepon" name="no_hp" id="txtPhone" autocomplete='off'><span id="spnPhoneStatus"></span>
       </div>
 
       <div class="form-group">
         <label>Email</label>
-        <input type="email" name="email" value="" placeholder="email" class="form-control" required="" autocomplete='off'>
+        <input type="email" name="email" value="" placeholder="email" class="form-control" autocomplete='off'>
       </div>
 
       <div class="form-group">       
         <label>Nama Ayah</label>
-        <input type="text" name="nama_ayah" value="" placeholder="nama ayah" class="form-control" required="" autocomplete='off'>
+        <input type="text" name="nama_ayah" value="" placeholder="nama ayah" class="form-control" autocomplete='off'>
       </div>
 
       <div class="form-group">       
         <label>Nama Ibu</label>
-        <input type="text" name="nama_ibu" value="" placeholder="nama ibu" class="form-control" required="" autocomplete='off'>
+        <input type="text" name="nama_ibu" value="" placeholder="nama ibu" class="form-control" autocomplete='off'>
       </div>
 
       <button type="submit" class="btn bg-gradient-info btn-user btn-block"><font color="white">
