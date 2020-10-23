@@ -10,9 +10,13 @@ class Data_bimbingan extends CI_Controller
     public function __Construct()
     {
         parent::__Construct();
-        $this->load->model('M_data_bimbingan');
-        $this->load->model('M_data_master');
-        $this->load->model('M_data_users');
+        if($this->session->userdata('level')!='admin' && $this->session->userdata('level')!='guru'){
+            redirect(base_url("/Login"));
+        }else{  
+            $this->load->model('M_data_bimbingan');
+            $this->load->model('M_data_master');
+            $this->load->model('M_data_users');
+        }
     }
 
     public function index(){
@@ -138,7 +142,10 @@ class Data_bimbingan extends CI_Controller
         ];
         $firestore = new FirestoreClient($config);
 
-
+        if($this->session->userdata('level')=='guru'){
+            $this->M_data_bimbingan->update_status_bimbingan($id_bimbingan);
+        }
+        
         $bimbingan =$this->M_data_bimbingan->get_bimbingan_where_id($id_bimbingan)->row(); 
 
         $usersRef = $firestore->collection('messages')->document($id_bimbingan)->collection($id_bimbingan);
@@ -162,27 +169,21 @@ class Data_bimbingan extends CI_Controller
     }
 
     public function get_bimbingan_siswa($nis){
-        if(!$this->session->userdata('logged_in')){
-            redirect('login');
-        } elseif ($this->session->userdata('level') == 'siswa' || $this->session->userdata('level') == 'ortu') {
-            redirect('users/dashboard');
-        } else {
-            $id_sekolah = $this->session->userdata('id_sekolah');
-            
-            $data['menu']='data_bimbingan';
-            $data['mode']='bimbingan';
-            $data['content']='data_bimbingan/view_bimbingan_siswa';
-            $data['user'] = $this->M_data_users->get_data_user_by_id();
-            $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_siswa($nis)->result_array();
-            $data['data_belum_dibaca']=array();
-            $data['data_kelas']=array();
-            $data['data_siswa']=array();
-        	$this->load->view('admin/partial/index_admin',$data);
-        }
+        
+        $id_sekolah = $this->session->userdata('id_sekolah');           
+        $data['menu']='data_bimbingan';
+        $data['mode']='bimbingan';
+        $data['content']='data_bimbingan/view_bimbingan_siswa';
+        $data['user'] = $this->M_data_users->get_data_user_by_id();
+        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_siswa($nis)->result_array();
+        $data['data_belum_dibaca']=array();
+        $data['data_kelas']=array();
+        $data['data_siswa']=array();
+    	$this->load->view('admin/partial/index_admin',$data);
+        
     }
 
     public function laporan_pdf(){
-
         $data = array(
             "dataku" => array(
                 "nama" => "Petani Kode",
@@ -200,10 +201,7 @@ class Data_bimbingan extends CI_Controller
     }
 
     public function rekap_bimbingan($id_bimbingan){
-        if($this->session->userdata('level')!='guru'){
-            redirect('Data_bimbingan');
-        }
-        $nik=$this->session->userdata('nik');
+        
         $config = [
             'keyFilePath' => './bimkos-d7a96-firebase-adminsdk-15us9-4475d82d63.json',
             'projectId' => "bimkos-d7a96",
@@ -220,20 +218,16 @@ class Data_bimbingan extends CI_Controller
         // echo "Tanggal : $bimbingan->tgl_bim <br>";
         // echo "Subjek : $bimbingan->subjek <br><br>";
 
-        // foreach ($snapshot as $bimbingan) {
-        //     echo ('bimbingan') . " : " . $bimbingan['content'] . "<br>";
-        //     echo ('dari') . " : " . $bimbingan['idFrom'] . "<br>";
-        //     echo ('untuk') . " : " . $bimbingan['idTo'] . "<br>";
-        //     echo "<br>";
-        // }
+        $to = array();
+        $i=0;
+        foreach ($snapshot as $bimbing) {
+            $to[$i]=$bimbing['idTo'];
+            $i++;
+        }
 
-        // echo sprintf('Found %d documents!', $snapshot->size());
         $data['bimbingan'] = $bimbingan;
         $data['data_bimbingan'] = $snapshot;
-        $data['guru'] = $this->M_data_master->get_guru($nik);
-
-
-
+        $data['guru'] = $this->M_data_master->get_guru($to[0]);
         
         $this->load->library('pdf');
     
@@ -241,7 +235,7 @@ class Data_bimbingan extends CI_Controller
         $this->pdf->filename = "laporan.pdf";
         $this->pdf->load_view('laporan_pdf', $data);
 
-        //echo var_dump($bimbingan);
+        //echo var_dump($to[0]);
     }
     
 }

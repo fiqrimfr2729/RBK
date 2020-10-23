@@ -91,6 +91,7 @@ class Bimbingan extends CI_Controller{
         $firestore = new FirestoreClient($config);
         $id_chat = date('ymdhms');
 
+        $this->M_data_bimbingan->update_status_bimbingan_siswa($id_bimbingan);
         $date = new DateTime();
         $timestamp = $date->getTimestamp();
         $data = [

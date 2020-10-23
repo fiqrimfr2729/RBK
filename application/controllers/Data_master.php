@@ -8,10 +8,14 @@ class Data_master extends CI_Controller
     public function __Construct()
     {
         parent::__Construct();
-        $this->load->model('M_data_master');
-        $this->load->model('M_data_users');
-        $this->load->model('M_data_bimbingan');
-        $this->load->library('form_validation');
+        if($this->session->userdata('level')!='admin' && $this->session->userdata('level')!='guru'){
+            redirect(base_url("/Login"));
+        }else{  
+            $this->load->model('M_data_master');
+            $this->load->model('M_data_users');
+            $this->load->model('M_data_bimbingan');
+            $this->load->library('form_validation');
+        }
     }
 
     public function index(){

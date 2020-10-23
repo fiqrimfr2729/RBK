@@ -34,12 +34,12 @@
             <tr>
                 <td><b>Tingkat </td>
                 <td><b>:</td>
-                <td><b><?php if($bimbingan->tingkatan=='1'){echo "X (Sepuluh)";}elseif($bimbingan->tingkatan=='2'){echo "XI (Sebelas)";}elseif($bimbingan->tingkatan=='3'){echo "XII(Duabelas)";} ?></td>
+                <td><b><?php if($bimbingan->id_tingkatan=='1'){echo "X (Sepuluh)";}elseif($bimbingan->id_tingkatan=='2'){echo "XI (Sebelas)";}elseif($bimbingan->id_tingkatan=='3'){echo "XII(Duabelas)";} ?></td>
             </tr>
             <tr>
                 <td><b>Subjek </td>
                 <td><b>:</td>
-                <td><b><?php echo $bimbingan->subjek ?></td>
+                <td><b><?php echo $bimbingan->subject ?></td>
             </tr>
         </table> 
 

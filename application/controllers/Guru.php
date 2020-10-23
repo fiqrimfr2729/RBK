@@ -4,13 +4,17 @@ class Guru extends CI_Controller {
 
     public function __Construct() {
         parent::__Construct();
-        $this->load->model('M_login');
-        $this->load->model('M_data_master');
-        $this->load->model('M_data_absensi');
-        $this->load->model('M_data_users');
-        $this->load->model('M_data_bimbingan');
-        $this->load->model('M_data_konseling');
-        $this->load->model('M_data_pelanggaran');
+        if($this->session->userdata('level')!='admin' && $this->session->userdata('level')!='guru'){
+            redirect(base_url("/Login"));
+        }else{  
+            $this->load->model('M_login');
+            $this->load->model('M_data_master');
+            $this->load->model('M_data_absensi');
+            $this->load->model('M_data_users');
+            $this->load->model('M_data_bimbingan');
+            $this->load->model('M_data_konseling');
+            $this->load->model('M_data_pelanggaran');
+        }
     }
 
     public function index(){

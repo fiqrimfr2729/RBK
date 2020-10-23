@@ -8,9 +8,9 @@ class Jurusan extends CI_Controller
     public function __Construct()
     {
         parent::__Construct();
-        if($this->session->userdata('logged_in') == null){
-            redirect('login');
-        }else{    
+        if($this->session->userdata('level')!='admin' && $this->session->userdata('level')!='guru'){
+            redirect(base_url("/Login"));
+        }else{  
             $this->load->model('M_data_master');
             $this->load->model('M_data_users');
             $this->load->model('M_data_bimbingan');

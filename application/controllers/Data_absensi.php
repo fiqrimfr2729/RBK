@@ -49,26 +49,6 @@ class Data_absensi extends CI_Controller
 
     }
 
-
-    function tambah_user_siswa($NIS) {
-        $siswa_view=$this->M_data_absensi->lihat_user($NIS);
-        $NIS=$siswa_view[0]->NIS;
-        $nama_lengkap=$siswa_view[0]->nama_lengkap;
-        $username=$siswa_view[0]->NIS;
-        $password=$siswa_view[0]->NIS;
-        $email_admin=$siswa_view[0]->email;
-        $data=array(
-            'NIS'=>$NIS,
-            'nama_lengkap'=>$nama_lengkap,
-            'username'=>$username,
-            'password'=>md5($password),
-            'email_admin'=>$email_admin,
-            'level'=>'siswa'
-        );
-        $this->M_data_absensi->tambah_user($data);
-        redirect('Data_users/siswa');
-    }
-
     public function jurusan(){
      $data['menu']='data_absensi';
      $data['mode']='jurusan';

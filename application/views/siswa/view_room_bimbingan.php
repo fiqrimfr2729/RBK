@@ -40,7 +40,7 @@
 		<div class="message-input">
 			<div class="wrap">
       <form action="<?php echo base_url('Siswa/bimbingan/kirim_bimbingan'); ?>" method="post">
-        <input type="text" name="isi_bimbingan" placeholder="Ketik bimbingan anda....." required />
+        <input type="text" name="isi_bimbingan" placeholder="Ketik bimbingan anda....." required autocomplete="off" />
         <input type="hidden" name="nik" value='<?php echo $guru->nik; ?>'/>
         <input type="hidden" name="id_bimbingan" value='<?php echo $data_bimbingan->id_bimbingan; ?>'/>
         <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->

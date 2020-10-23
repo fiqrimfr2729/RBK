@@ -8,14 +8,15 @@ class Data_pengumuman extends CI_Controller
     public function __Construct()
     {
         parent::__Construct();
-        if($this->session->userdata('level') == 'siswa'){
+        if($this->session->userdata('level')!='admin' && $this->session->userdata('level')!='guru'){
             redirect(base_url("/Login"));
-        }
-        $this->load->model('M_data_master');
+        }else{  
+            $this->load->model('M_data_master');
             $this->load->model('M_data_absensi');        
             $this->load->model('M_data_konseling');
             $this->load->model('M_data_users');
             $this->load->model('M_data_belajar');
+        }
     }
 
     public function index(){
@@ -158,60 +159,5 @@ class Data_pengumuman extends CI_Controller
     }
 
 
-    public function edit_belajar($id_belajar){
-        // AMBIL DATA PELANGGARAN AWAL
-        $data_belajar=$this->M_data_belajar->get_belajar_by_id($id_belajar)->result_array();
-
-        // AMBIL DATA BOBOT AWAL
-        $data_bobot_awal=$this->M_data_pelanggaran->get_pelanggaran_by_id($data_belajar[0]['id_pelanggaran'])->result_array();
-
-        // AMBIL DATA BOBOT BARU
-        $data_bobot=$this->M_data_pelanggaran->get_pelanggaran_by_id($this->input->post('pelanggaran'))->result_array();
-
-        // AMBIL DATA SKOR SISWA
-        $data_siswa=$this->M_data_master->get_siswa_by_nis($this->input->post('nis'))->result_array();
-
-        // KURANGI SKOR SISWA
-        $update_skor=array(
-            'skor' => $data_siswa[0]['skor']+$data_bobot_awal[0]['bobot']-$data_bobot[0]['bobot'],
-        );
-
-        $data = array(
-            'NIS' => $this->input->post('nis'),
-            'id_pelanggaran' => $this->input->post('pelanggaran'),
-            'catatan' => $this->input->post('catatan'),
-            'waktu_pelanggaran' => $this->input->post('waktu_pelanggaran'),
-            'waktu_input' => date('Y-m-d H:i:s'),
-            'tkp' => $this->input->post('tkp')
-        );
-
-        if ($this->M_data_belajar->edit_belajar($id_belajar, $data)) {
-
-            $this->M_data_master->edit_siswa($this->input->post('nis'), $update_skor);
-
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-              </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal di perbarui!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-              </button></div>");
-        }
-        redirect('data_belajar');
-    }
-
-    public function delete_belajar($id_belajar){
-        if ($this->M_data_belajar->delete_belajar($id_belajar)) {
-            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>Data berhasil hapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-              </button></div>");
-        } else {
-            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>Data gagal dihapus!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-              </button></div>");
-        }
-        redirect('data_belajar');
-
-    }
-
+    
 }

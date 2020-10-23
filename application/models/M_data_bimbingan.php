@@ -79,6 +79,16 @@ class M_data_bimbingan extends CI_Model {
 		->get('bimbingan');
 	}
 
+	//update status sudah dibaca
+	public function update_status_bimbingan($id_bimbingan){
+		$this->db->where('id_bimbingan', $id_bimbingan)->set('status_by_guru', '1')->set('status', '1')->update('bimbingan');
+	}
+
+	//update status belum dibaca
+	public function update_status_bimbingan_siswa($id_bimbingan){
+		$this->db->where('id_bimbingan', $id_bimbingan)->set('status_by_guru', '0')->set('status', '0')->update('bimbingan');
+	}
+
 	public function add_bimbingan($data){
 		return $this->db->insert('bimbingan', $data);
 	}
