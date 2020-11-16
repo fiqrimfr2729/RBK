@@ -67,8 +67,9 @@ class M_data_bimbingan extends CI_Model {
 	public function get_bimbingan_belum_dibaca(){
 		
 		$id_sekolah = $this->session->userdata('id_sekolah');
-		
-		return $this->db->get_where('bimbingan', ['id_sekolah' => $id_sekolah, 'status' => 0] );
+		$this->db->from('bimbingan');
+		$this->db->join('siswa', 'siswa.nis = bimbingan.nis');
+		return $this->db->where('id_sekolah', $id_sekolah)->where('status_by_guru', '0')->get();
 	}
 
 	// GET STATUS BIMBINGAN = 1 DAN ISI_BIMBINGAN != '' (SUDAH DI BALAS ortu BK) BERDASARKAN SESSION AKUN SISWA UTK NOTIF SISWA

@@ -37,7 +37,7 @@ class Admin extends CI_Controller {
             $data['data_pelanggaran']=10;
             $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_admin($id_sekolah)->num_rows();
             $data['data_konseling']=0;
-            $data['data_belum_dibaca']=array();
+            $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
 
             // $data['data'] =  $this->session->userdata('id_user');
             $data['user'] = $this->M_data_users->get_data_user_by_id();
@@ -85,13 +85,27 @@ class Admin extends CI_Controller {
     //     redirect('admin/dashboard/');
     // }
 
-    function change_password($id_users) {
-       $data=array(
-        'password'=>md5($this->input->post('password'))
+    function change_password() {
+        $id_users = '';
+        if($this->session->userdata('nik')==null){
+            if($this->session->userdata('nis')==null){
+                $id_users=$this->session->userdata('username');
+            }else{
+                $id_users=$this->session->userdata('nis');
+            }
+        }else{
+            $id_users=$this->session->userdata('nik');
+        }
+        $data=array(
+            'password_lama' => $this->input->post('password_lama'),
+            'password_baru' => $this->input->post('password_baru'),
+            'password_konfirmasi' => $this->input->post('password_konfirmasi')
         );
-       $this->M_login->ubah_sandi($data,$id_users);
-      redirect('admin/dashboard/');
-   }
+        $respon = $this->M_login->ubah_sandi($data,$id_users);
+
+        echo var_dump($respon);
+        // redirect('admin/dashboard/');
+    }
 
    public function logout() {
     $this->session->sess_destroy();

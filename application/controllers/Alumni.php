@@ -28,7 +28,7 @@ class Alumni extends CI_Controller
         $data['data_siswa']=array();
         $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
        
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
@@ -46,7 +46,7 @@ class Alumni extends CI_Controller
         $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
         $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
         $data['data_tingkatan']=array();
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
@@ -62,7 +62,7 @@ class Alumni extends CI_Controller
         $data['data_siswa']=array();
         $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
        
-         $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
@@ -80,7 +80,7 @@ class Alumni extends CI_Controller
         $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
         $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
         $data['data_tingkatan']=array();
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data); 
 
         //echo var_dump($siswa);

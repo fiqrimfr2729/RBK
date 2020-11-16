@@ -106,7 +106,41 @@ class M_login extends CI_Model {
 	}
 
 	function ubah_sandi($data,$id_users) {
-		$this->db->where('id_users',$id_users);
-		$this->db->update('users',$data);
+		$level = 'users';
+		$user = $this->db->from('users')->where('id_user', $id_users)->get()->row();
+		if($user==null){
+			$level= 'admin';
+			$user=$this->db->from('admin')->where('username', $id_users)->get()->row();
+		}
+		if(password_verify($data['password_lama'], $user->password)){
+			if($data['password_baru'] == $data['password_konfirmasi']){
+				if($level == 'users'){
+					$this->db->where('id_user', $id_users)->set('password', password_hash($data['password_baru'], PASSWORD_DEFAULT))->update('users');
+				}else{
+					$this->db->where('username', $id_users)->set('password', password_hash($data['password_baru'], PASSWORD_DEFAULT))->update('admin');
+				}
+				
+				$data = array(
+					'status' => true,
+					'level' => 'true',
+					'message' => 'Ganti password berhasil'
+				);
+				return $data;
+			}else{
+				$data = array(
+					'status' => false,
+					'level' => 'false',
+					'message' => 'Konfirmasi password tidak sesuai'
+				);
+				return $data;
+			}
+		}else{
+			$data = array(
+				'status' => false,
+				'level' => 'false',
+				'message' => 'Password lama salah'
+			);
+			return $data;
+		}
 	}
 }

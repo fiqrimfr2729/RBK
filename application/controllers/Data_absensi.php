@@ -124,7 +124,7 @@ public function select_class() {
     $data['data_siswa']=array();
     $data['data_jurusan']=array();
     $data['data_tingkatan']=array();
-    $data['data_belum_dibaca']=array();
+    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -138,7 +138,7 @@ public function select_class_absen() {
     $data['data_siswa']=array();
     $data['data_jurusan']=array();
     $data['data_tingkatan']=array();
-    $data['data_belum_dibaca']=array();
+    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -153,7 +153,7 @@ public function rekap_absensi() {
     $data['data_siswa']=array();
     $data['data_jurusan']=array();
     $data['data_tingkatan']=array();
-    $data['data_belum_dibaca']=array();
+    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -168,7 +168,7 @@ public function lihat_absensi() {
     $data['data_absensi']=$this->M_data_absensi->get_absensi();
     $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
     $data['data_tingkatan']=array();
-    $data['data_belum_dibaca']=array();
+    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -186,7 +186,7 @@ public function tampil_kelas() {
     $data['tanggal'] = $tanggal;
     $data['data_jurusan']=array();
     //$data['data_tingkatan']=$this->M_data_absensi->get_tingkatan()->result_array();
-    $data['data_belum_dibaca']=array();
+    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
 
     //echo var_dump($data['data_siswa']);
     $this->load->view('admin/partial/index_admin',$data);
@@ -203,7 +203,7 @@ public function tampil_rekap() {
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
     $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
     $data['data_tingkatan']=array();
-    $data['data_belum_dibaca']=array();
+    $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -319,7 +319,7 @@ redirect('data_absensi/tampil_rekap?id_kelas='.$this->input->post('id_kelas'));
         $data['data_siswa']=$this->M_data_absensi->get_siswa()->result_array();
         $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
         $data['data_tingkatan']=array();
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
@@ -337,7 +337,7 @@ redirect('data_absensi/tampil_rekap?id_kelas='.$this->input->post('id_kelas'));
         $data['data_kelas']=array();
         $data['data_jurusan']=array();
         $data['data_tingkatan']=array();
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data);
     }
 
@@ -362,7 +362,7 @@ redirect('data_absensi/tampil_rekap?id_kelas='.$this->input->post('id_kelas'));
         $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
         $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();
         $data['data_tingkatan']=array();
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $this->load->view('admin/partial/index_admin',$data);
 
     }

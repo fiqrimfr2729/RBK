@@ -23,9 +23,7 @@ class M_data_absensi extends CI_Model {
 		// $this->db->from('kelas');
 		$sekolah = $this->session->userdata('id_sekolah');
 		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
-		$this->db->where('kelas.tingkatan', '1');
-		$this->db->or_where('kelas.tingkatan', '2');
-		$this->db->or_where('kelas.tingkatan', '3');
+		$this->db->where('kelas.tingkatan !=', '4');
 		$this->db->order_by('kelas.tingkatan','ASC');
 		$this->db->order_by('jurusan.nama_jurusan','ASC');
 		$this->db->order_by('kelas.urutan_kelas','ASC');

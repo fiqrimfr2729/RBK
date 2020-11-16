@@ -23,22 +23,18 @@
       <!-- Dropdown - Alerts -->
       <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
         <h6 class="dropdown-header">
-          Alerts Center
+          Pemberitahuan Bimbingan
         </h6>
         <?php foreach ($data_belum_dibaca as $data) { ?>
-          <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url('Data_bimbingan/baca_bimbingan/'.$data['id_bimbingan']) ?>">
+          <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url('Data_bimbingan/bimbingan/'.$data['id_bimbingan']) ?>">
             <div class="mr-3">
               <div class="icon-circle bg-primary">
                 <i class="fas fa-file-alt text-white"></i>
               </div>
             </div>
             <div>
-              <div class="small text-gray-500"><?php echo $data['tanggal_bimbingan'] ?></div>
-              <?php foreach ($data_siswa as $siswa) {
-                      if ($data['NIS']==$siswa['NIS']) {
-               ?>
-                <span class="font-weight-bold">Bimbingan dari <?php echo $siswa['nama_lengkap'] ?> belum dibaca!</span>
-              <?php } } ?>
+              <div class="small text-gray-500"><?php echo $data['tgl_bim'] ?></div>
+              <span class="font-weight-bold">Bimbingan dari <?php echo $data['nama_siswa'] ?> belum dibaca</span>
             </div>
           </a>
         <?php } ?>
@@ -105,11 +101,12 @@
       </div>
       <div class="modal-body">
           <form class="user" action="<?php echo base_url('Admin/change_password'); ?>/<?php echo $this->session->userdata('id_users') ?>" method="post">
-            <!-- <div class="form-group">
-              <input type="password" class="form-control form-control-user" name="password_lama" placeholder="Password lama" autocomplete="off" required="">
-            </div> -->
+           
+          <div class="form-group">
+              <input type="password" class="form-control form-control-user" name="password_lama" placeholder="Kata sandi lama" autocomplete="off" required="">
+            </div>
             <div class="form-group">
-              <input type="password" class="form-control form-control-user" name="password" placeholder="Kata sandi baru" autocomplete="off" required="">
+              <input type="password" class="form-control form-control-user" name="password_baru" placeholder="Kata sandi baru" autocomplete="off" required="">
             </div>
             <div class="form-group">
               <input type="password" class="form-control form-control-user" name="password_konfirmasi" placeholder="Konfirmasi kata sandi baru" autocomplete="off" required="">

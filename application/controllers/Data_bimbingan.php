@@ -33,7 +33,7 @@ class Data_bimbingan extends CI_Controller
             $data['content']='data_bimbingan/view_bimbingan';
             $data['user'] = $this->M_data_users->get_data_user_by_id();
             $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan($id_sekolah, $nik)->result_array();
-            $data['data_belum_dibaca']=array();
+            $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
             $data['data_kelas']=array();
             $data['data_siswa']=array();
         	$this->load->view('admin/partial/index_admin',$data);
@@ -46,34 +46,11 @@ class Data_bimbingan extends CI_Controller
             $data['content']='data_bimbingan/view_bimbingan';
             $data['user'] = $this->M_data_users->get_data_user_by_id();
             $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_admin($id_sekolah)->result_array();
-            $data['data_belum_dibaca']=array();
+            $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
             $data['data_kelas']=array();
             $data['data_siswa']=array();
         	$this->load->view('admin/partial/index_admin',$data);
         }
-    }
-
-    public function baca_bimbingan($id_bimbingan){
-        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_id($id_bimbingan)->result_array();
-         $data['user'] = $this->M_data_users->get_data_user_by_id();
-
-        if ($data['data_bimbingan'][0]['status']==0) {
-            // UPDATE STATUS BIMBINGAN SUDAH DI BACA
-            $data = array(
-                    'status' => 1
-            );
-            $this->M_data_bimbingan->edit_bimbingan($id_bimbingan, $data);
-        }
-        
-        $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_where_id($id_bimbingan)->result_array();
-        $data['menu']='data_bimbingan';
-
-        $data['content']='data_bimbingan/view_detail_bimbingan';
-        $data['user'] = $this->M_data_users->get_data_user_by_id();
-        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
-        $data['data_kelas']=$this->M_data_master->get_kelas()->result_array();
-        $data['data_siswa']=$this->M_data_master->get_siswa()->result_array();
-        $this->load->view('admin/partial/index_admin',$data);
     }
 
     public function kirim_bimbingan(){
@@ -176,7 +153,7 @@ class Data_bimbingan extends CI_Controller
         $data['content']='data_bimbingan/view_bimbingan_siswa';
         $data['user'] = $this->M_data_users->get_data_user_by_id();
         $data['data_bimbingan']=$this->M_data_bimbingan->get_bimbingan_siswa($nis)->result_array();
-        $data['data_belum_dibaca']=array();
+        $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
         $data['data_kelas']=array();
         $data['data_siswa']=array();
     	$this->load->view('admin/partial/index_admin',$data);

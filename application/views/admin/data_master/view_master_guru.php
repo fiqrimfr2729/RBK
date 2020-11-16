@@ -34,11 +34,8 @@
                 <a href="javascript:;" title="Detail" data-toggle="modal" data-target="#detailGuru<?php echo $guru->nik ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
                 <a href="javascript:;" title="Edit" data-toggle="modal" data-target="#editGuru<?php echo $guru->nik ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
                 <a href="javascript:;" title="Hapus" data-toggle="modal" data-target="#hapusGuru<?php echo $guru->nik ?>" class="btn btn-danger" style="margin-right: 10px"><i class="fas fa-trash"></i></a>
-                <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$guru->nik ?>" title="detail" class="btn btn-info"><i class="fas fa-eye"></i> </a>
               <?php else: ?>
                 <a href="javascript:;" title="Detail" data-toggle="modal" data-target="#detailSiswa<?php echo $guru->nik ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i>  Detail</a>
-
-                <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$guru->nik ?>" title="detail" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i>  Bimbingan </a>
               <?php endif; ?>
               </td>
             </tr>
@@ -83,6 +80,7 @@
         <form class="user" action="<?php echo base_url('data_master/edit_guru/'); ?>" method="post">
         <input type="hidden" name="id_guru" class="form-control" value="<?php echo $guru->id_guru; ?>">
         <input type="hidden" name="nik_lama" class="form-control" value="<?php echo $guru->nik; ?>">
+        <input type="hidden" name="tingkatan_lama" class="form-control" value="<?php echo $guru->tingkatan; ?>">
           <div class="form-group">       
             <label>Nama Lengkap</label>
             <input type="text" name="nama_guru" placeholder="Masukan Nama Guru" class="form-control" value="<?php echo $guru->nama_guru ?>">

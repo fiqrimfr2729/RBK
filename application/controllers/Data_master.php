@@ -151,6 +151,18 @@ class Data_master extends CI_Controller
             }
         }
 
+        $tingkatan = $this->input->post('tingkatan');
+        
+        $guru = $this->db->from('guru')->where('tingkatan', $tingkatan)->where('id_sekolah', $id_sekolah)->get()->row();
+        if($guru != null){
+            $tingkat = '';
+            if($tingkatan == '1'){$tingkat = 'X (Sepuluh)';}elseif($tingkatan == '2'){$tingkat = 'XI (Sebelas)';}else{$tingkat = 'XII (Duabelas)';}
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>"."Data guru untuk Kelas $tingkat sudah ada". "!<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+            </button></div>");
+            redirect('data_master/guru');
+        }
+
         $data = array(
             'nik'           => $this->input->post('nik'),
             'nama_guru'     => $this->input->post('nama_guru'),
