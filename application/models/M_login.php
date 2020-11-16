@@ -24,7 +24,7 @@ class M_login extends CI_Model {
 		}else{
 			$guru = $this->db->get_where('guru', ['nik' => $username])->row();
 			if($guru){
-				$user = $this->db->get_where('users', ['id_user' => $username])->row();
+				$user = $this->db->get_where('users', ['id_user' => $guru->id_user])->row();
 				if($user){
 					if(password_verify($password, $user->password)) {
 						$data = array(
