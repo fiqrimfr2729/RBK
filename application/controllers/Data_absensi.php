@@ -196,14 +196,17 @@ public function tampil_rekap() {
     $data['menu']='data_absensi';
     $data['mode']='kelas';
     $id_kelas=$this->input->GET('id_kelas',TRUE);
+    $data['id_kelas'] = $id_kelas;
     $data['user'] = $this->M_data_users->get_data_user_by_id();
     $data['kelas']=$this->M_data_absensi->get_kelas_sekarang($id_kelas)->result_array();
     $data['data_siswa']=$this->M_data_absensi->tampilkan_siswa_absen($id_kelas);
     $data['content']='data_absensi/view_absensi_tampil_rekap';
+    $data['data_absensi'] = $this->db->from('rekap')->where('id_kelas', $id_kelas)->get()->result();
     $data['data_kelas']=$this->M_data_absensi->get_kelas()->result_array();
     $data['data_jurusan']=$this->M_data_absensi->get_jurusan()->result_array();
     $data['data_tingkatan']=array();
     $data['data_belum_dibaca']=$this->M_data_bimbingan->get_bimbingan_belum_dibaca()->result_array();
+    //echo var_dump($data['data_absensi']);
     $this->load->view('admin/partial/index_admin',$data);
 }
 
@@ -302,7 +305,9 @@ public function add_rekap(){
     $insert_data = array(
         'file' => $this->_upload_excel(),
         'tanggal' => $date,
-        'id_sekolah' => $id_sekolah);
+        'id_sekolah' => $id_sekolah,
+        'id_kelas' => $this->input->post('id_kelas'));
+
 $this->db->insert('rekap', $insert_data);
 redirect('data_absensi/tampil_rekap?id_kelas='.$this->input->post('id_kelas'));
     // var_dump($insert_data);
