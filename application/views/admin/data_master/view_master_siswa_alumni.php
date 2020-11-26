@@ -15,6 +15,7 @@
             <th width="5%">No</th>
             <th>NIS</th>
             <th>Nama Siswa</th>
+            <th>Universitas/Bekerja</th>
             <th width="30%">Aksi</th>
 
             
@@ -26,6 +27,7 @@
               <td align="center"> <?php echo ++$i; ?> </td>
               <td align="center"> <?php echo $siswa['nis'] ?> </td>
               <td align="center"> <?php echo $siswa['nama_siswa'] ?> </td>
+              <td align="center"> <?php echo $siswa['nama_universitas'] ?> </td>
               <?php if ($this->session->userdata('level') == "admin"){ ?>
               <td align="center"> 
                 <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>

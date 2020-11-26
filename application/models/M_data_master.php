@@ -61,6 +61,18 @@ class M_data_master extends CI_Model {
 		return $sql_siswa;
 	}
 
+	function get_alumni($id_kelas) {
+		$this->db->from('siswa');
+		$this->db->join('kelas','siswa.id_kelas=kelas.id_kelas');
+		$this->db->join('jurusan','kelas.id_jurusan=jurusan.id_jurusan');
+		$this->db->join('alumni', 'siswa.nis = alumni.nis');
+		$this->db->join('universitas', 'universitas.id_universitas = alumni.id_univ');
+		$this->db->where('siswa.id_kelas',$id_kelas);
+		$this->db->order_by('siswa.nama_siswa','ASC');
+		$sql_siswa=$this->db->get();
+		return $sql_siswa;
+	}
+
 	function lihat_user($NIS) {
 		$this->db->where('NIS',$NIS);
 		return $this->db->get('siswa')->result();
