@@ -41,7 +41,7 @@ class Alumni extends CI_Controller
         $id_kelas=$this->input->GET('id_kelas',TRUE);
         $data['kelas']=$this->M_data_master->get_kelas_sekarang($id_kelas)->result_array();
         $data['nama_kelas']=$this->M_data_master->get_kelas_sekarangbyid($id_kelas)->row_array();
-        $data['data_siswa']=$this->M_data_master->get_alumni($id_kelas)->result_array();
+        $data['data_siswa']=$this->M_data_alumni->get_alumni($id_kelas);
         $data['content']='data_master/view_master_siswa_alumni';
         $data['data_kelas']=$this->M_data_master->get_kelas($id_sekolah)->result_array();
         $data['data_jurusan']=$this->M_data_master->get_jurusan($id_sekolah)->result_array();

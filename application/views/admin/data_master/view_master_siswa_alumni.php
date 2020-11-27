@@ -25,19 +25,19 @@
           <?php $i=0; foreach($data_siswa as $siswa): ?>
             <tr>
               <td align="center"> <?php echo ++$i; ?> </td>
-              <td align="center"> <?php echo $siswa['nis'] ?> </td>
-              <td align="center"> <?php echo $siswa['nama_siswa'] ?> </td>
-              <td align="center"> <?php echo $siswa['nama_universitas'] ?> </td>
+              <td align="center"> <?php echo $siswa->nis ?> </td>
+              <td align="center"> <?php echo $siswa->nama_siswa ?> </td>
+              <td align="center"> <?php if($siswa->univ != null){echo $siswa->univ->nama_universitas;} ?> </td>
               <?php if ($this->session->userdata('level') == "admin"){ ?>
               <td align="center"> 
-                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
-                <a href="javascript:;" title="edit" data-toggle="modal" data-target="#editSiswa<?php echo $siswa['nis'] ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
-                <a href="javascript:;" title="hapus" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa['nis'] ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa->nis ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
+                <a href="javascript:;" title="edit" data-toggle="modal" data-target="#editSiswa<?php echo $siswa->nis ?>" class="btn btn-warning" style="margin-right: 10px"><i class="fas fa-edit"></i></a>
+                <a href="javascript:;" title="hapus" data-toggle="modal" data-target="#hapusSiswa<?php echo $siswa->nis ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
               </td>
               <?php }else{ ?>
               <td align="center"> 
-                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa['nis'] ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i>  Detail</a>
-                <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$siswa['nis'] ?>" title="detail" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i>  Bimbingan </a>
+                <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa->nis ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i>  Detail</a>
+                <a href="<?php echo base_url('data_bimbingan/get_bimbingan_siswa/').$siswa->nis ?>" title="detail" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-eye"></i>  Bimbingan </a>
               </td>
               <?php } ?>
             </tr>
@@ -51,7 +51,7 @@
 </div>
 
 <?php foreach ($data_siswa as $siswa) { ?>
-  <div class="modal fade" id="hapusSiswa<?php echo $siswa['nis'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="hapusSiswa<?php echo $siswa->nis ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -63,13 +63,13 @@
         <div class="modal-body">Click yes if you sure</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="<?php echo base_url('data_master/delete_siswa/'.$siswa['nis']) ?>">Yes!</a>
+          <a class="btn btn-primary" href="<?php echo base_url('data_master/delete_siswa/'.$siswa->nis) ?>">Yes!</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="editSiswa<?php echo $siswa['nis'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editSiswa<?php echo $siswa->nis ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -79,20 +79,20 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" action="<?php echo base_url('data_master/edit_siswa/'.$siswa['nis']); ?>" method="post">
+        <form class="user" action="<?php echo base_url('data_master/edit_siswa/'.$siswa->nis); ?>" method="post">
           <div class="form-group">       
             <label>Nama Lengkap</label>
-            <input type="text" name="nama_siswa" placeholder="Masukan Nama Siswa" class="form-control" value="<?php echo $siswa['nama_siswa'] ?>">
+            <input type="text" name="nama_siswa" placeholder="Masukan Nama Siswa" class="form-control" value="<?php echo $siswa->nama_siswa ?>">
           </div>
 
           <div class="form-group">
             <label>NIS</label>
-            <input type="text" name="nis" placeholder="Masukan NIS" class="form-control" value="<?php echo $siswa['nis'] ?>">
+            <input type="text" name="nis" placeholder="Masukan NIS" class="form-control" value="<?php echo $siswa->nis ?>">
           </div>
 
           <div class="form-group">
             <label>NISN</label>
-            <input type="text" name="nisn" placeholder="Masukan NISN" class="form-control" value="<?php echo $siswa['nisn'] ?>">
+            <input type="text" name="nisn" placeholder="Masukan NISN" class="form-control" value="<?php echo $siswa->nisn ?>">
           </div>
 
           <div class="form-group">
@@ -100,7 +100,7 @@
             <select name="id_kelas" class="form-control">
               <option selected="" disabled="">--Please select--</option>
               <?php foreach ($data_kelas as $kelas) { ?>
-              <option <?php if($kelas['id_kelas']==$siswa['id_kelas']){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
+              <option <?php if($kelas['id_kelas']==$siswa->id_kelas){echo 'selected';} ?> value="<?php echo $kelas['id_kelas'] ?>"><?php echo $kelas['tingkatan'].' '.$kelas['nama_jurusan'].' '.$kelas['urutan_kelas']; ?></option>
               <?php } ?>
             </select>
           </div>
@@ -109,35 +109,35 @@
             <label>Jenis Kelamin</label>
             <div class="radio-inline">
               <label>
-               <input name="jk" type="radio" required="" value="Laki-Laki" <?php if($siswa['jk']=='1'){echo "checked";} ?>>Laki-laki
+               <input name="jk" type="radio" required="" value="Laki-Laki" <?php if($siswa->jk=='1'){echo "checked";} ?>>Laki-laki
              </label>
            </div>
            <div class="radio-inline">
             <label>
-             <input name="jk" type="radio" required="" value="Perempuan" <?php if($siswa['jk']=='0'){echo "checked";} ?>>Perempuan
+             <input name="jk" type="radio" required="" value="Perempuan" <?php if($siswa->jk=='0'){echo "checked";} ?>>Perempuan
            </label>
          </div>
        </div>
 
        <div class="form-group">
         <label>Tempat Lahir</label>
-        <input type="text" placeholder="Tempat lahir" name="tempat_lahir" class="form-control" value="<?php echo $siswa['tempat_lahir'] ?>">
+        <input type="text" placeholder="Tempat lahir" name="tempat_lahir" class="form-control" value="<?php echo $siswa->tempat_lahir ?>">
       </div>
 
       <div class="form-group">
         <label>Tanggal Lahir</label>
-        <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" value="<?php echo $siswa['tanggal_lahir'] ?>">
+        <input type="date" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" value="<?php echo $siswa->tanggal_lahir ?>">
       </div>
 
 
       <div class="form-group">       
         <label>Alamat</label>
-        <textarea class="form-control" name="alamat"><?php echo $siswa['alamat'] ?></textarea>
+        <textarea class="form-control" name="alamat"><?php echo $siswa->alamat ?></textarea>
       </div>
 
       <div class="form-group">
         <label>No. Telep</label>
-        <input type="text" class="form-control" placeholder="No Telepon" name="no_hp" id="txtPhone" value="<?php echo $siswa['no_hp'] ?>"><span id="spnPhoneStatus"></span>
+        <input type="text" class="form-control" placeholder="No Telepon" name="no_hp" id="txtPhone" value="<?php echo $siswa->no_hp ?>"><span id="spnPhoneStatus"></span>
       </div>
 
       <div class="form-group">
@@ -147,12 +147,12 @@
 
       <div class="form-group">       
         <label>Nama Ayah</label>
-        <input type="text" name="nama_ayah" placeholder="Nama Ayah" class="form-control" value="<?php echo $siswa['nama_ayah'] ?>">
+        <input type="text" name="nama_ayah" placeholder="Nama Ayah" class="form-control" value="<?php echo $siswa->nama_ayah ?>">
       </div>
 
       <div class="form-group">       
         <label>Nama Ibu</label>
-        <input type="text" name="nama_ibu" placeholder="Nama Ibu" class="form-control" value="<?php echo $siswa['nama_ibu'] ?>">
+        <input type="text" name="nama_ibu" placeholder="Nama Ibu" class="form-control" value="<?php echo $siswa->nama_ibu ?>">
       </div>
 
       
@@ -165,7 +165,7 @@
 </div>
 </div>
 
-<div class="modal fade" id="detailSiswa<?php echo $siswa['nis'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="detailSiswa<?php echo $siswa->nis ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -177,63 +177,63 @@
       <div class="modal-body">
         <div class="form-group">       
           <label>Nama Lengkap</label>
-          <input type="text" name="nama_lengkap" placeholder="Nama" class="form-control" disabled="" value="<?php echo $siswa['nama_siswa'] ?>">
+          <input type="text" name="nama_lengkap" placeholder="Nama" class="form-control" disabled="" value="<?php echo $siswa->nama_siswa ?>">
         </div>
 
         <div class="form-group">
           <label>NIS</label>
-          <input type="text" name="nis" placeholder="NIS" class="form-control" disabled="" value="<?php echo $siswa['nis'] ?>">
+          <input type="text" name="nis" placeholder="NIS" class="form-control" disabled="" value="<?php echo $siswa->nis ?>">
         </div>
 
         <div class="form-group">
           <label>NISN</label>
-          <input type="text" name="nisn" placeholder="NISN" class="form-control" disabled="" value="<?php echo $siswa['nisn'] ?>">
+          <input type="text" name="nisn" placeholder="NISN" class="form-control" disabled="" value="<?php echo $siswa->nisn ?>">
         </div>
 
         <div class="form-group">
           <label>Kelas</label>
-          <input type="text" name="kelas" placeholder="Kelas" class="form-control" disabled="" value="<?php echo 'Alumni '.$siswa['singkatan_jurusan'].' '.$siswa['urutan_kelas']; ?>">
+          <input type="text" name="kelas" placeholder="Kelas" class="form-control" disabled="" value="<?php echo 'Alumni '.$siswa->singkatan_jurusan.' '.$siswa->urutan_kelas; ?>">
         </div>
 
 
         <div class="form-group">       
           <label>Jenis Kelamin</label>
-          <input type="text" placeholder="Jenis kelamin" name="jk" class="form-control" disabled="" value="<?php if($siswa['jk']==1){echo 'Laki-laki';}else{echo 'Perempuan';} ?>">
+          <input type="text" placeholder="Jenis kelamin" name="jk" class="form-control" disabled="" value="<?php if($siswa->jk==1){echo 'Laki-laki';}else{echo 'Perempuan';} ?>">
         </div>
 
         <div class="form-group">
           <label>Tempat Lahir</label>
-          <input type="text" placeholder="Tempat lahir" name="tempat_lahir" class="form-control" disabled="" value="<?php echo $siswa['tempat_lahir'] ?>">
+          <input type="text" placeholder="Tempat lahir" name="tempat_lahir" class="form-control" disabled="" value="<?php echo $siswa->tempat_lahir ?>">
         </div>
 
         <div class="form-group">
           <label>Tanggal Lahir</label>
-          <input type="text" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" disabled="" value="<?php echo $siswa['tanggal_lahir'] ?>">
+          <input type="text" placeholder="Tanggal lahir" name="tanggal_lahir" class="form-control" disabled="" value="<?php echo $siswa->tanggal_lahir ?>">
         </div>
 
         <div class="form-group">       
           <label>Alamat</label>
-          <textarea class="form-control" name="alamat" disabled=""><?php echo $siswa['alamat'] ?></textarea>
+          <textarea class="form-control" name="alamat" disabled=""><?php echo $siswa->alamat ?></textarea>
         </div>
 
         <div class="form-group">
           <label>No. Telep</label>
-          <input type="text" class="form-control" placeholder="No Telepon" name="no_hp" disabled="" id="txtPhone" value="<?php echo $siswa['no_hp'] ?>"><span id="spnPhoneStatus"></span>
+          <input type="text" class="form-control" placeholder="No Telepon" name="no_hp" disabled="" id="txtPhone" value="<?php echo $siswa->no_hp ?>"><span id="spnPhoneStatus"></span>
         </div>
 
         <div class="form-group">
           <label>Email</label>
-          <input type="email" name="email" placeholder="email" class="form-control" disabled="" value="<?php echo $siswa['email'] ?>">
+          <input type="email" name="email" placeholder="email" class="form-control" disabled="" value="<?php echo $siswa->email ?>">
         </div>
 
         <div class="form-group">       
           <label>Nama Ayah</label>
-          <input type="text" name="nama_ayah" placeholder="Nama Ayah" class="form-control" disabled="" value="<?php echo $siswa['nama_ayah'] ?>">
+          <input type="text" name="nama_ayah" placeholder="Nama Ayah" class="form-control" disabled="" value="<?php echo $siswa->nama_ayah ?>">
         </div>
 
         <div class="form-group">       
           <label>Nama Ibu</label>
-          <input type="text" name="nama_ibu" placeholder="Nama Ibu" class="form-control" disabled="" value="<?php echo $siswa['nama_ibu'] ?>">
+          <input type="text" name="nama_ibu" placeholder="Nama Ibu" class="form-control" disabled="" value="<?php echo $siswa->nama_ibu ?>">
         </div>
 
       </div>
