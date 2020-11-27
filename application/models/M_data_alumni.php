@@ -48,7 +48,7 @@ class M_data_alumni extends CI_Model {
         //$this->db->join('universitas', 'universitas.id_universitas = alumni.id_univ', 'left' );
         foreach($sql_siswa as $siswa){
             $this->db->from('alumni')->where('nis', $siswa->nis);
-            $this->db->join('universitas', 'universitas.id_universitas = alumni.id_univ');
+            $this->db->join('universitas', 'universitas.id_universitas = alumni.id_univ', 'left');
             $univ = $this->db->get()->row();
             $siswa->univ = $univ;
         }

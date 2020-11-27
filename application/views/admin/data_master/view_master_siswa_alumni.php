@@ -27,7 +27,8 @@
               <td align="center"> <?php echo ++$i; ?> </td>
               <td align="center"> <?php echo $siswa->nis ?> </td>
               <td align="center"> <?php echo $siswa->nama_siswa ?> </td>
-              <td align="center"> <?php if($siswa->univ != null){echo $siswa->univ->nama_universitas;}else{echo "-";} ?> </td>
+              <td align="center"> <?php if($siswa->univ != null){
+                if($siswa->univ->id_univ == 0){echo "Bekerja";}else{echo $siswa->univ->nama_universitas;}}else{echo "-";} ?> </td>
               <?php if ($this->session->userdata('level') == "admin"){ ?>
               <td align="center"> 
                 <a href="javascript:;" title="detail" data-toggle="modal" data-target="#detailSiswa<?php echo $siswa->nis ?>" class="btn btn-info" style="margin-right: 10px"><i class="fas fa-list"></i></a>
