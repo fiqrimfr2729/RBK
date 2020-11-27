@@ -142,7 +142,7 @@
 
       <div class="form-group">
         <label>Email</label>
-        <input type="email" name="email" placeholder="email" class="form-control" value="<?php echo $siswa['email'] ?>">
+        <input type="email" name="email" placeholder="email" class="form-control" value="<?php echo $siswa->email ?>">
       </div>
 
       <div class="form-group">       
